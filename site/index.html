@@ -3,24 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Faceology &mdash; The Facial Muscle Clinical Map for Estheticians</title>
-<meta name="description" content="An interactive clinical reference that maps every facial muscle to its aging role, tension signs, and the exact massage techniques that release it. Built for facialists and esthetics professionals.">
+<title>The Somatic Face Map &mdash; The Facial Massage Detailed Map for Estheticians &amp; At-Home Glow</title>
+<meta name="description" content="An interactive detailed muscle map for estheticians, facial massage practitioners, and at-home anti-aging. Connect facial anatomy to aging concerns, tension patterns, and treatment sequences. A course product by Ethereal Glow Haus.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<!-- Brand-kit fonts are Architype Tschichold / TAN Aegean / Adventures Unlimited / Glacial Indifference (Canva).
+     Until the licensed files are dropped in via @font-face, these are the closest free stand-ins:
+       headings/logo -> Poppins (geometric sans)   subheads/quotes -> Cormorant Garamond (editorial serif)
+       whimsical accents -> Caveat (handwritten script)   body -> Mulish (clean sans, ~Glacial Indifference) -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Caveat:wght@500;600&family=Mulish:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --teal: #1B6B6B;
-    --teal-dark: #0f4040;
-    --teal-mid: #4a9a9a;
-    --teal-light: #c8e8e8;
-    --teal-pale: #eef7f7;
-    --gold: #c8973a;
-    --gold-light: #fdf3e3;
-    --cream: #faf7f2;
-    --dark: #1a1a2e;
-    --gray: #6b7280;
-    --white: #ffffff;
+    /* ── Ethereal Glow Haus brand palette ── */
+    --forest:    #3a3c26;  /* Deep Forest  - primary dark: headers, text, banners */
+    --sage:      #8d9f77;  /* Sage Green   - primary brand: buttons, accents, icons */
+    --sage-soft: #9cad9a;  /* Soft Sage    - secondary accents, hover states */
+    --sage-mute: #adb8a2;  /* Muted Sage   - table headers, dividers, subtle bg */
+    --espresso:  #4b210a;  /* Deep Espresso- dark text alt, rich accents */
+    --terracotta:#a0735a;  /* Terracotta   - warm accent: callouts, highlights */
+    --clay:      #bd9274;  /* Warm Clay    - secondary warm accent */
+    --sand:      #ceb496;  /* Sand         - warm neutral backgrounds */
+    --gold:      #e6c797;  /* Golden Wheat - gold accent, shimmer (use sparingly) */
+    --linen:     #d6c0b0;  /* Linen        - card backgrounds, soft section fills */
+    --cream:     #ded9d1;  /* Cream        - page background alternative */
+    --fog:       #d5d7d2;  /* Fog          - subtle neutral fill */
+    --white:     #ffffff;
+
+    /* semantic aliases mapped onto the brand palette (old teal vars retired) */
+    --teal:       var(--sage);
+    --teal-dark:  var(--forest);
+    --teal-mid:   var(--sage-soft);
+    --teal-light: var(--sage-mute);
+    --teal-pale:  #eef0ea;          /* faintest sage wash for soft fills */
+    --gold-light: #f7efdd;
+    --dark:       var(--forest);    /* avoid pure black */
+    --gray:       #6f7263;          /* muted forest-grey for secondary text */
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -28,14 +45,17 @@
   html { scroll-behavior: smooth; }
 
   body {
-    font-family: 'DM Sans', system-ui, sans-serif;
-    background: var(--cream);
-    color: var(--dark);
+    font-family: 'Mulish', system-ui, sans-serif;
+    background: var(--white);
+    color: var(--forest);
     line-height: 1.6;
     overflow-x: hidden;
   }
 
-  .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .serif  { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .script { font-family: 'Caveat', cursive; }
+  /* Headings & logo use the geometric brand font (Architype Tschichold stand-in) */
+  h1, h2, .brand .name, .plan h3, .cta-band h2 { font-family: 'Poppins', system-ui, sans-serif; }
   .wrap { max-width: 1140px; margin: 0 auto; padding: 0 28px; }
 
   /* ── NAV ── */
@@ -63,22 +83,22 @@
     text-decoration: none;
   }
   .brand .mark {
-    width: 34px; height: 34px;
-    border-radius: 50%;
-    background: var(--gold);
+    width: 30px; height: 30px;
+    border: 1.5px solid var(--gold);   /* thin diamond frame, echoing the logo */
+    transform: rotate(45deg);
     display: grid;
     place-items: center;
-    color: var(--teal-dark);
-    font-family: 'Cormorant Garamond', serif;
-    font-weight: 600;
-    font-size: 1.25rem;
+    color: var(--gold);
+    font-size: 0.7rem;
     flex-shrink: 0;
   }
+  .brand .mark span, .brand .mark { line-height: 1; }
   .brand .name {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.4rem;
-    letter-spacing: 0.06em;
-    font-weight: 500;
+    font-family: 'Poppins', system-ui, sans-serif;  /* Architype Tschichold stand-in */
+    font-size: 1.12rem;
+    letter-spacing: 0.04em;
+    font-weight: 400;
+    text-transform: lowercase;   /* logo uses lowercase mixed-case letterforms */
   }
   .nav-links { display: flex; align-items: center; gap: 30px; }
   .nav-links a {
@@ -103,13 +123,26 @@
   /* ── HERO ── */
   .hero {
     background:
-      radial-gradient(circle at 80% 10%, rgba(200,151,58,0.18), transparent 45%),
-      radial-gradient(circle at 10% 90%, rgba(74,154,154,0.25), transparent 50%),
-      linear-gradient(160deg, var(--teal-dark) 0%, #14595a 60%, var(--teal) 100%);
+      radial-gradient(circle at 80% 10%, rgba(230,199,151,0.22), transparent 45%),
+      radial-gradient(circle at 10% 90%, rgba(141,159,119,0.30), transparent 52%),
+      linear-gradient(160deg, var(--forest) 0%, #45472f 58%, #59624a 100%);
     color: white;
     padding: 90px 0 100px;
     position: relative;
     overflow: hidden;
+  }
+  /* whimsical gold "firefly" dots scattered over the hero (ethereal fairy touch, used sparingly) */
+  .hero::after {
+    content: "";
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background-image:
+      radial-gradient(circle, rgba(230,199,151,0.9) 0 1.5px, transparent 2px),
+      radial-gradient(circle, rgba(230,199,151,0.7) 0 1px, transparent 2px),
+      radial-gradient(circle, rgba(230,199,151,0.8) 0 1.2px, transparent 2px);
+    background-size: 340px 300px, 260px 380px, 420px 260px;
+    background-position: 12% 22%, 78% 64%, 46% 88%;
+    opacity: 0.55;
   }
   .hero-grid {
     max-width: 1140px;
@@ -133,14 +166,14 @@
     font-weight: 600;
   }
   .hero h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 3.6rem;
-    line-height: 1.08;
-    font-weight: 400;
-    letter-spacing: 0.01em;
+    font-family: 'Poppins', system-ui, sans-serif;  /* Architype Tschichold stand-in */
+    font-size: 3.3rem;
+    line-height: 1.1;
+    font-weight: 300;
+    letter-spacing: 0.005em;
     margin-bottom: 22px;
   }
-  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero h1 em { font-family: 'Caveat', cursive; color: var(--gold); font-style: normal; font-size: 1.1em; }
   .hero p.lead {
     font-size: 1.12rem;
     color: rgba(255,255,255,0.85);
@@ -386,7 +419,13 @@
     color: var(--teal);
     margin: 12px 0 4px;
   }
-  .plan .price span { font-size: 0.9rem; color: var(--gray); font-family: 'DM Sans'; }
+  .plan .price span { font-size: 0.9rem; color: var(--gray); font-family: 'Mulish', sans-serif; }
+  .upgrade-note {
+    text-align: center;
+    margin-top: 30px;
+    color: var(--terracotta);
+    font-size: 1.5rem;
+  }
   .plan ul { list-style: none; margin: 20px 0 26px; flex-grow: 1; }
   .plan li {
     padding: 8px 0 8px 26px;
@@ -495,8 +534,8 @@
 <nav>
   <div class="nav-inner">
     <a href="#top" class="brand">
-      <span class="mark">F</span>
-      <span class="name">Faceology</span>
+      <span class="mark">&middot;</span>
+      <span class="name">The Somatic Face Map</span>
     </a>
     <div class="nav-links">
       <a href="#features">Features</a>
@@ -512,40 +551,45 @@
 <header class="hero" id="top">
   <div class="hero-grid">
     <div>
-      <span class="eyebrow">For Estheticians &amp; Facial Massage Practitioners</span>
+      <span class="eyebrow">For Estheticians, Practitioners &amp; At-Home Users</span>
       <h1>Read the face. <em>Release</em> the tension. Reverse the years.</h1>
-      <p class="lead">Faceology is the interactive clinical map that connects every facial muscle to its aging role, the way tension shows on a client's face, and the exact massage sequence that releases it.</p>
+      <p class="lead">The Somatic Face Map is the interactive detailed map that connects every facial muscle to its aging role, the way tension shows on the face, and the exact massage technique that releases it. Watch the technique, then follow along on the map.</p>
       <div class="hero-btns">
         <a href="#tool" class="btn btn-gold">Explore the Live Map</a>
-        <a href="#pricing" class="btn btn-ghost">See Plans</a>
+        <a href="#pricing" class="btn btn-ghost">See Access Tiers</a>
       </div>
       <div class="hero-stats">
         <div class="stat"><div class="num">20+</div><div class="lbl">Muscles Mapped</div></div>
         <div class="stat"><div class="num">11</div><div class="lbl">Treatment Sequences</div></div>
-        <div class="stat"><div class="num">2</div><div class="lbl">Clinical Views</div></div>
+        <div class="stat"><div class="num">2</div><div class="lbl">Detailed Views</div></div>
       </div>
     </div>
     <div class="hero-art">
       <div class="face-card">
         <!-- decorative mini face, echoing the tool's diagram -->
         <svg width="280" height="330" viewBox="0 0 280 330">
-          <ellipse cx="140" cy="130" rx="92" ry="112" fill="#f5d5b8" stroke="#d4a882" stroke-width="1.5"/>
-          <path d="M58 60 Q74 42 104 36 Q140 30 176 36 Q206 42 222 60 Q214 78 204 88 Q174 84 140 83 Q106 84 76 88 Q66 78 58 60Z" fill="#4a9a9a" opacity="0.85"/>
-          <ellipse cx="108" cy="118" rx="24" ry="14" fill="#8b5cf6" opacity="0.8"/>
-          <ellipse cx="172" cy="118" rx="24" ry="14" fill="#8b5cf6" opacity="0.8"/>
-          <ellipse cx="108" cy="118" rx="10" ry="6" fill="#fff" opacity="0.6"/>
-          <ellipse cx="172" cy="118" rx="10" ry="6" fill="#fff" opacity="0.6"/>
-          <path d="M78 158 Q86 148 98 145 Q104 163 108 180 Q100 192 93 202 Q82 186 78 168Z" fill="#10b981" opacity="0.82"/>
-          <path d="M202 158 Q194 148 182 145 Q176 163 172 180 Q180 192 187 202 Q198 186 202 168Z" fill="#10b981" opacity="0.82"/>
-          <path d="M60 168 Q68 152 80 145 Q86 159 86 188 Q83 208 75 218 Q60 210 54 192 Q52 178 60 168Z" fill="#dc2626" opacity="0.82"/>
-          <path d="M220 168 Q212 152 200 145 Q194 159 194 188 Q197 208 205 218 Q220 210 226 192 Q228 178 220 168Z" fill="#dc2626" opacity="0.82"/>
-          <ellipse cx="140" cy="200" rx="26" ry="17" fill="#7c3aed" opacity="0.8"/>
-          <path d="M100 244 Q110 239 122 247 Q129 262 127 290 Q118 298 109 294 Q99 274 99 258Z" fill="#f97316" opacity="0.8"/>
-          <path d="M180 244 Q170 239 158 247 Q151 262 153 290 Q162 298 171 294 Q181 274 181 258Z" fill="#f97316" opacity="0.8"/>
-          <path d="M134 135 Q132 158 128 167 Q135 172 140 172 Q145 172 152 167 Q148 158 146 135" fill="#d4a882" opacity="0.35"/>
-          <path d="M122 192 Q140 197 158 192" stroke="#c0806a" stroke-width="1.4" fill="none"/>
+          <ellipse cx="140" cy="130" rx="92" ry="112" fill="#ceb496" stroke="#bd9274" stroke-width="1.5"/>
+          <path d="M58 60 Q74 42 104 36 Q140 30 176 36 Q206 42 222 60 Q214 78 204 88 Q174 84 140 83 Q106 84 76 88 Q66 78 58 60Z" fill="#8d9f77" opacity="0.9"/>
+          <ellipse cx="108" cy="118" rx="24" ry="14" fill="#9cad9a" opacity="0.85"/>
+          <ellipse cx="172" cy="118" rx="24" ry="14" fill="#9cad9a" opacity="0.85"/>
+          <ellipse cx="108" cy="118" rx="10" ry="6" fill="#fff" opacity="0.55"/>
+          <ellipse cx="172" cy="118" rx="10" ry="6" fill="#fff" opacity="0.55"/>
+          <path d="M78 158 Q86 148 98 145 Q104 163 108 180 Q100 192 93 202 Q82 186 78 168Z" fill="#adb8a2" opacity="0.88"/>
+          <path d="M202 158 Q194 148 182 145 Q176 163 172 180 Q180 192 187 202 Q198 186 202 168Z" fill="#adb8a2" opacity="0.88"/>
+          <path d="M60 168 Q68 152 80 145 Q86 159 86 188 Q83 208 75 218 Q60 210 54 192 Q52 178 60 168Z" fill="#a0735a" opacity="0.85"/>
+          <path d="M220 168 Q212 152 200 145 Q194 159 194 188 Q197 208 205 218 Q220 210 226 192 Q228 178 220 168Z" fill="#a0735a" opacity="0.85"/>
+          <ellipse cx="140" cy="200" rx="26" ry="17" fill="#8d9f77" opacity="0.85"/>
+          <path d="M100 244 Q110 239 122 247 Q129 262 127 290 Q118 298 109 294 Q99 274 99 258Z" fill="#bd9274" opacity="0.85"/>
+          <path d="M180 244 Q170 239 158 247 Q151 262 153 290 Q162 298 171 294 Q181 274 181 258Z" fill="#bd9274" opacity="0.85"/>
+          <path d="M134 135 Q132 158 128 167 Q135 172 140 172 Q145 172 152 167 Q148 158 146 135" fill="#bd9274" opacity="0.4"/>
+          <path d="M122 192 Q140 197 158 192" stroke="#4b210a" stroke-width="1.4" fill="none"/>
+          <!-- gold firefly dots -->
+          <circle cx="44" cy="70" r="1.8" fill="#e6c797"/>
+          <circle cx="236" cy="96" r="1.5" fill="#e6c797"/>
+          <circle cx="60" cy="270" r="1.6" fill="#e6c797"/>
+          <circle cx="224" cy="250" r="1.4" fill="#e6c797"/>
         </svg>
-        <div style="text-align:center; color:var(--teal-light); font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; margin-top:10px;">Tap any muscle &middot; see the protocol</div>
+        <div style="text-align:center; color:var(--gold); font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; margin-top:10px;">Tap any muscle &middot; see the technique</div>
       </div>
     </div>
   </div>
@@ -559,9 +603,9 @@
 <section id="features">
   <div class="wrap">
     <div class="section-head">
-      <span class="tag">Why Faceology</span>
+      <span class="tag">Why The Somatic Face Map</span>
       <h2>Everything you need to treat the muscle, not just the skin</h2>
-      <p>Move beyond guesswork. Faceology gives you the clinical reasoning behind every stroke, so each treatment is intentional and repeatable.</p>
+      <p>Move beyond guesswork. The Somatic Face Map gives you the reasoning behind every stroke, so each treatment is intentional and repeatable &mdash; whether you're in the treatment room or caring for your own skin at home.</p>
     </div>
     <div class="features">
       <div class="feature">
@@ -575,24 +619,24 @@
         <p>Start from the concern &mdash; forehead lines, nasolabial folds, jowls &mdash; and instantly see the primary and supporting muscles to target.</p>
       </div>
       <div class="feature">
+        <div class="ic">▶️</div>
+        <h3>Practice Mode with Video</h3>
+        <p>Tap a muscle or sequence, watch Danielle's technique video right in the panel, then follow along on the map &mdash; a simple watch-then-try format.</p>
+      </div>
+      <div class="feature">
         <div class="ic">📋</div>
         <h3>Treatment Sequences</h3>
-        <p>Eleven Open&rarr;Work&rarr;Close protocols for lines, lifting, jaw tension, puffiness, and sensitive skin &mdash; filterable in a tap.</p>
+        <p>Eleven Open&rarr;Work&rarr;Close routines for lines, lifting, jaw tension, puffiness, and sensitive skin &mdash; filterable in a tap.</p>
       </div>
       <div class="feature">
-        <div class="ic">💆‍♀️</div>
-        <h3>Technique Tags</h3>
-        <p>Every muscle links to the right modality: lymphatic, buccal, cupping, sculpting, deep muscle, or cross-fiber friction.</p>
-      </div>
-      <div class="feature">
-        <div class="ic">🧠</div>
+        <div class="ic">🌿</div>
         <h3>Upstream Drivers</h3>
         <p>Includes the hidden players &mdash; SCM, trapezius, suboccipitals, pectoralis &mdash; that sabotage facial results when ignored.</p>
       </div>
       <div class="feature">
         <div class="ic">📱</div>
         <h3>Treatment-Room Ready</h3>
-        <p>Clean, fast, and mobile-friendly. Pull it up on a tablet between strokes or print the matching clinical cheat sheets.</p>
+        <p>Clean, fast, and mobile-friendly. Pull it up on your phone between strokes, or print the matching detailed cheat sheets.</p>
       </div>
     </div>
   </div>
@@ -604,16 +648,16 @@
     <div class="section-head">
       <span class="tag">The Live Map</span>
       <h2>Try it right here</h2>
-      <p>This is the real, working clinical map &mdash; the same tool your clients never see but your results always show.</p>
+      <p>This is the real, working detailed map &mdash; the heart of the course. Tap any muscle to see its anatomy, aging role, and the technique that releases it.</p>
     </div>
     <div class="demo-frame-wrap">
       <div class="browser-bar">
-        <span class="dot" style="background:#ff5f57"></span>
-        <span class="dot" style="background:#febc2e"></span>
-        <span class="dot" style="background:#28c840"></span>
-        <span class="url">faceology.app / clinical-map</span>
+        <span class="dot" style="background:#a0735a"></span>
+        <span class="dot" style="background:#e6c797"></span>
+        <span class="dot" style="background:#8d9f77"></span>
+        <span class="url">thesomaticfacemap.com / detailed-map</span>
       </div>
-      <iframe src="Facial_Muscle_Map.html" title="Faceology Facial Muscle Clinical Map" loading="lazy"></iframe>
+      <iframe src="Facial_Muscle_Map.html" title="The Somatic Face Map &mdash; Facial Massage Detailed Map" loading="lazy"></iframe>
     </div>
     <p class="demo-note">Tip: works best full-screen &mdash; <a href="Facial_Muscle_Map.html" target="_blank" rel="noopener">open the map in its own tab &rarr;</a></p>
   </div>
@@ -634,13 +678,13 @@
       </div>
       <div class="step">
         <div class="n">2</div>
-        <h3>Understand the muscle</h3>
-        <p>Tap into anatomy, aging role, and how tension presents, so you know exactly what you're releasing and why.</p>
+        <h3>Watch, then try</h3>
+        <p>Open Practice Mode to watch Danielle's technique video in the panel, then follow along on the map &mdash; understanding anatomy and aging role as you go.</p>
       </div>
       <div class="step">
         <div class="n">3</div>
         <h3>Follow the sequence</h3>
-        <p>Run a proven Open&rarr;Work&rarr;Close protocol &mdash; always closing with lymphatic drainage for lasting results.</p>
+        <p>Run a proven Open&rarr;Work&rarr;Close routine &mdash; always closing with lymphatic drainage for lasting results.</p>
       </div>
     </div>
   </div>
@@ -649,9 +693,9 @@
 <!-- ══ QUOTE ══ -->
 <section class="quote-section">
   <div class="wrap">
-    <blockquote>Finally, a reference that thinks the way an experienced facialist does &mdash; from the concern, to the muscle, to the exact hands-on sequence.</blockquote>
-    <div class="author">Dani &mdash; Master Esthetician</div>
-    <div class="role">Creator of Faceology</div>
+    <blockquote>Finally, a reference that thinks the way an experienced facialist does &mdash; from the concern, to the muscle, to the exact hands-on technique.</blockquote>
+    <div class="author">Danielle &mdash; Master Esthetician</div>
+    <div class="role">Creator of The Somatic Face Map &middot; Ethereal Glow Haus</div>
   </div>
 </section>
 
@@ -659,57 +703,59 @@
 <section class="pricing" id="pricing">
   <div class="wrap">
     <div class="section-head">
-      <span class="tag">Plans</span>
-      <h2>Simple pricing for working professionals</h2>
-      <p>Start free. Upgrade when you're ready to bring it into every treatment room.</p>
+      <span class="tag">Access Tiers</span>
+      <h2>Pay once. Yours for life.</h2>
+      <p>Every tier is a one-time purchase &mdash; no subscriptions. Start anywhere and upgrade later by paying only the difference.</p>
     </div>
     <div class="plans">
       <div class="plan">
-        <h3>Explore</h3>
-        <div class="price">Free</div>
-        <p style="color:var(--gray); font-size:0.86rem;">For curious practitioners</p>
+        <h3>The Map</h3>
+        <div class="price">$39<span> once</span></div>
+        <p style="color:var(--gray); font-size:0.86rem;">The full interactive map</p>
         <ul>
           <li>Full interactive muscle map</li>
-          <li>Front &amp; side-neck views</li>
-          <li>Aging Area lookup</li>
-          <li>3 sample treatment sequences</li>
+          <li>Front &amp; neck/jaw views</li>
+          <li>Aging area lookup</li>
+          <li>Full anatomy, aging &amp; tension detail for every muscle</li>
+          <li>Practice Mode &mdash; 1&ndash;2 sample technique videos</li>
         </ul>
-        <a href="#tool" class="btn btn-outline">Start Exploring</a>
+        <a href="#" class="btn btn-outline">Get The Map</a>
       </div>
       <div class="plan featured">
-        <h3>Practitioner</h3>
-        <div class="price">$19<span>/mo</span></div>
-        <p style="color:var(--gray); font-size:0.86rem;">For solo facialists</p>
+        <h3>At-Home Glow</h3>
+        <div class="price">$89<span> once</span></div>
+        <p style="color:var(--gray); font-size:0.86rem;">For serious at-home anti-aging</p>
         <ul>
-          <li>Everything in Explore</li>
-          <li>All 11 treatment sequences</li>
-          <li>Printable clinical cheat sheets</li>
-          <li>Buccal &amp; advanced technique notes</li>
-          <li>Offline / treatment-room mode</li>
+          <li>Everything in The Map</li>
+          <li>Practice Mode &mdash; full basic technique video library</li>
+          <li>Follow-along preventative aging routines</li>
+          <li>Beginner-friendly guidance</li>
+          <li>1&ndash;2 advanced Practitioner video previews</li>
         </ul>
-        <a href="#" class="btn btn-gold">Start 14-Day Trial</a>
+        <a href="#" class="btn btn-gold">Get At-Home Glow</a>
       </div>
       <div class="plan">
-        <h3>Studio</h3>
-        <div class="price">$49<span>/mo</span></div>
-        <p style="color:var(--gray); font-size:0.86rem;">For spas &amp; teams</p>
+        <h3>Practitioner</h3>
+        <div class="price">$179<span> once</span></div>
+        <p style="color:var(--gray); font-size:0.86rem;">For licensed estheticians &amp; practitioners</p>
         <ul>
-          <li>Everything in Practitioner</li>
-          <li>Up to 5 team members</li>
-          <li>Training mode for new staff</li>
-          <li>Custom protocol builder</li>
-          <li>Priority support</li>
+          <li>Everything in At-Home Glow</li>
+          <li>Full advanced video library &mdash; buccal, deep muscle, sculpting</li>
+          <li>All 11 detailed treatment sequences</li>
+          <li>Printable cheat sheets</li>
+          <li>Treatment Room Mode</li>
         </ul>
-        <a href="#" class="btn btn-outline">Contact Sales</a>
+        <a href="#" class="btn btn-outline">Get Practitioner</a>
       </div>
     </div>
+    <p class="upgrade-note script">Already own a tier? Upgrade anytime &mdash; you only pay the difference.</p>
   </div>
 </section>
 
 <!-- ══ CTA ══ -->
 <div class="cta-band">
   <h2>Treat with intention.</h2>
-  <p>Open the clinical map and see how every line, fold, and band on the face traces back to a muscle you can release.</p>
+  <p>Open the detailed map and see how every line, fold, and band on the face traces back to a muscle you can release.</p>
   <a href="#tool" class="btn btn-gold">Open the Map</a>
 </div>
 
@@ -718,8 +764,8 @@
   <div class="wrap">
     <div class="footer-grid">
       <div>
-        <a href="#top" class="brand"><span class="mark">F</span><span class="name">Faceology</span></a>
-        <p class="blurb">The interactive clinical map for facial massage &mdash; connecting anatomy, aging, and technique for estheticians who treat the muscle, not just the surface.</p>
+        <a href="#top" class="brand"><span class="mark">&middot;</span><span class="name">The Somatic Face Map</span></a>
+        <p class="blurb">The interactive detailed map for facial massage &mdash; connecting anatomy, aging, and technique for estheticians, practitioners, and at-home users who treat the muscle, not just the surface. A course product by Ethereal Glow Haus.</p>
       </div>
       <div>
         <h4>Product</h4>
@@ -727,24 +773,24 @@
           <li><a href="#features">Features</a></li>
           <li><a href="#tool">The Map</a></li>
           <li><a href="#how">How It Works</a></li>
-          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#pricing">Access Tiers</a></li>
         </ul>
       </div>
       <div>
         <h4>Resources</h4>
         <ul>
           <li><a href="Facial_Muscle_Map.html" target="_blank" rel="noopener">Open Full Map</a></li>
-          <li><a href="#">Cheat Sheet (PDF)</a></li>
-          <li><a href="#">Clinical Cheat Sheet</a></li>
-          <li><a href="#">Contact</a></li>
+          <li><a href="Facial_Massage_Cheat_Sheet.docx" download>Cheat Sheet (Word)</a></li>
+          <li><a href="Facial_Massage_Detailed_Cheat_Sheet.docx" download>Detailed Cheat Sheet</a></li>
+          <li><a href="mailto:hello@etherealglowhaus.com">Contact</a></li>
         </ul>
       </div>
     </div>
     <div class="footer-bottom">
-      <span>&copy; 2026 Faceology. All rights reserved.</span>
-      <span>Crafted for licensed esthetics professionals.</span>
+      <span>&copy; 2026 The Somatic Face Map &middot; Ethereal Glow Haus. All rights reserved.</span>
+      <span>Crafted for estheticians, practitioners &amp; at-home glow.</span>
     </div>
-    <p class="disclaimer">For educational use by licensed estheticians and facial massage practitioners. Faceology is an anatomical and technique reference, not medical advice, diagnosis, or treatment. Always work within your scope of practice and applicable regulations.</p>
+    <p class="disclaimer">For educational use by licensed estheticians and facial massage practitioners. The Somatic Face Map is an anatomical and technique reference, not medical advice, diagnosis, or treatment. Always work within your scope of practice and applicable regulations.</p>
   </div>
 </footer>
 

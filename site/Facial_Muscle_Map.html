@@ -3,28 +3,45 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Facial Muscle Clinical Map</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<title>Facial Massage Detailed Map</title>
+<!-- Brand-kit fonts (Architype Tschichold / TAN Aegean / Glacial Indifference, Canva) stood in with
+     Poppins (geometric headings) / Cormorant Garamond (editorial serif) / Mulish (body). -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Mulish:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --teal: #1B6B6B;
-    --teal-dark: #0f4040;
-    --teal-mid: #4a9a9a;
-    --teal-light: #c8e8e8;
-    --teal-pale: #eef7f7;
-    --gold: #c8973a;
-    --gold-light: #fdf3e3;
-    --cream: #faf7f2;
-    --dark: #1a1a2e;
-    --gray: #6b7280;
-    --light-gray: #f3f4f6;
-    --white: #ffffff;
+    /* ── Ethereal Glow Haus brand palette (mapped per brand direction) ── */
+    --forest:    #3a3c26;
+    --sage:      #8d9f77;
+    --sage-soft: #9cad9a;
+    --sage-mute: #adb8a2;
+    --espresso:  #4b210a;
+    --terracotta:#a0735a;
+    --gold-wheat:#e6c797;
+    --linen:     #d6c0b0;
+    --cream-bg:  #ded9d1;
+
+    /* old teal vars remapped onto the new palette:
+       teal dark  #0f4040 -> Deep Forest, teal #1B6B6B -> Sage Green,
+       teal light #c8e8e8 -> Muted Sage, teal pale -> faint sage wash,
+       gold #c8973a -> Golden Wheat */
+    --teal:       var(--sage);
+    --teal-dark:  var(--forest);
+    --teal-mid:   var(--sage-soft);
+    --teal-light: var(--sage-mute);
+    --teal-pale:  #eef0ea;
+    --gold:       var(--gold-wheat);
+    --gold-light: #f7efdd;
+    --cream:      #ded9d1;
+    --dark:       var(--forest);     /* avoid pure black */
+    --gray:       #6f7263;
+    --light-gray: #eceee8;
+    --white:      #ffffff;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   body {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Mulish', sans-serif;
     background: var(--cream);
     color: var(--dark);
     min-height: 100vh;
@@ -36,11 +53,11 @@
     text-align: center;
   }
   header h1 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 2.4rem;
+    font-family: 'Poppins', system-ui, sans-serif;  /* Architype Tschichold stand-in */
+    font-size: 2.1rem;
     font-weight: 300;
     color: white;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.04em;
   }
   header p {
     font-size: 0.82rem;
@@ -66,7 +83,7 @@
     color: var(--teal-light);
     border-bottom: 3px solid transparent;
     transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-weight: 500;
   }
   .tab.active { color: white; border-bottom-color: var(--gold); }
@@ -108,7 +125,7 @@
     color: var(--teal);
     background: white;
     transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Mulish', sans-serif;
   }
   .view-btn.active { background: var(--teal); color: white; }
 
@@ -125,7 +142,7 @@
   .muscle-path.dimmed { opacity: 0.25; }
 
   .muscle-label {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Mulish', sans-serif;
     font-size: 9px;
     fill: #1a1a2e;
     font-weight: 500;
@@ -312,7 +329,7 @@
     color: var(--gray);
     background: white;
     transition: all 0.2s;
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Mulish', sans-serif;
   }
   .filter-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
 
@@ -420,18 +437,165 @@
   }
 
   @media print {
-    .tabs, .view-toggle, .hint { display: none; }
+    .tabs, .view-toggle, .hint, .header-controls, .room-exit { display: none; }
     .diagram-layout { grid-template-columns: 1fr; }
     .info-panel { display: none; }
+  }
+
+  /* ── Header controls: tier selector + Treatment Room Mode ── */
+  .header-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .tier-select {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--sage-mute);
+    font-size: 0.74rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tier-select select {
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.82rem;
+    background: rgba(255,255,255,0.12);
+    color: #fff;
+    border: 1px solid rgba(214,192,176,0.4);
+    border-radius: 16px;
+    padding: 5px 12px;
+  }
+  .room-toggle {
+    font-family: 'Mulish', sans-serif;
+    background: var(--gold);
+    color: var(--forest);
+    border: none;
+    border-radius: 18px;
+    padding: 7px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+  .room-toggle:hover { transform: translateY(-1px); }
+  .room-exit {
+    display: none;
+    position: fixed;
+    top: 14px; right: 14px;
+    z-index: 100;
+    background: var(--forest);
+    color: #fff;
+    border: 1px solid rgba(214,192,176,0.5);
+    border-radius: 18px;
+    padding: 8px 16px;
+    font-family: 'Mulish', sans-serif;
+    font-size: 0.82rem;
+    cursor: pointer;
+  }
+  /* Treatment Room Mode: strip the chrome, let the diagram breathe full-screen */
+  body.room-mode header p,
+  body.room-mode .header-controls,
+  body.room-mode .tabs,
+  body.room-mode .hint { display: none; }
+  body.room-mode header { padding: 12px 40px 10px; }
+  body.room-mode .room-exit { display: block; }
+  body.room-mode #page-quickref,
+  body.room-mode #page-sequences { display: none !important; }
+  body.room-mode .diagram-layout { max-width: 1100px; }
+
+  /* ── Practice Mode video block (injected into the active muscle card) ── */
+  .practice-mode {
+    margin: 4px 0 18px;
+    border: 1px solid var(--linen);
+    border-radius: 12px;
+    overflow: hidden;
+    background: var(--cream-bg);
+  }
+  .practice-mode .pm-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--sage);
+    color: #fff;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .practice-mode .pm-video {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    background:
+      radial-gradient(circle at 50% 42%, rgba(255,255,255,0.18), transparent 60%),
+      linear-gradient(135deg, var(--forest), #59624a);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    cursor: pointer;
+  }
+  .practice-mode .pm-play {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: rgba(230,199,151,0.95);
+    color: var(--forest);
+    display: grid; place-items: center;
+    font-size: 1.1rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+  }
+  .practice-mode .pm-caption {
+    padding: 10px 14px;
+    font-size: 0.82rem;
+    color: var(--gray);
+  }
+  /* Locked teaser state */
+  .practice-mode.locked .pm-video { filter: saturate(0.4) brightness(0.85); }
+  .practice-mode.locked .pm-play { background: rgba(255,255,255,0.85); }
+  .pm-lock-prompt {
+    padding: 12px 14px;
+    background: var(--gold-light);
+    border-top: 1px solid var(--linen);
+    font-size: 0.82rem;
+    color: var(--espresso);
+  }
+  .pm-lock-prompt strong { display: block; margin-bottom: 4px; }
+  .pm-lock-prompt button {
+    margin-top: 8px;
+    font-family: 'Mulish', sans-serif;
+    background: var(--terracotta);
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Facial Muscle Clinical Map</h1>
-  <p>Interactive Reference for Estheticians &amp; Facial Massage Practitioners</p>
+  <h1>Facial Massage Detailed Map</h1>
+  <p>Interactive Reference for Estheticians, Practitioners &amp; At-Home Users</p>
+  <div class="header-controls">
+    <label class="tier-select">
+      <span>Your access</span>
+      <select id="tier" onchange="setTier(this.value)">
+        <option value="map">The Map</option>
+        <option value="athome">At-Home Glow</option>
+        <option value="pro">Practitioner</option>
+      </select>
+    </label>
+    <button class="room-toggle" onclick="toggleRoomMode()">⛶ Treatment Room Mode</button>
+  </div>
 </header>
+<!-- floating exit button, only visible in Treatment Room Mode -->
+<button class="room-exit" onclick="toggleRoomMode()" aria-label="Exit Treatment Room Mode">✕ Exit</button>
 
 <div class="tabs">
   <div class="tab active" onclick="showPage('diagram')">Muscle Diagram</div>
@@ -473,133 +637,133 @@
         <!-- FRONTALIS -->
         <path id="m-frontalis" class="muscle-path" 
           d="M155 120 Q175 95 210 88 Q240 82 270 88 Q305 95 325 120 Q315 145 305 160 Q270 155 240 154 Q210 155 175 160 Q165 145 155 120Z"
-          fill="#4a9a9a" opacity="0.75"
+          fill="#9cad9a" opacity="0.75"
           onclick="selectMuscle('frontalis')" />
         <text class="muscle-label" x="240" y="125" text-anchor="middle">Frontalis</text>
 
         <!-- CORRUGATOR SUPERCILII -->
         <path id="m-corrugator" class="muscle-path"
           d="M200 168 Q220 162 240 163 Q260 162 280 168 Q270 178 240 176 Q210 178 200 168Z"
-          fill="#e07b54" opacity="0.8"
+          fill="#bd7250" opacity="0.8"
           onclick="selectMuscle('corrugator')" />
         <text class="muscle-label" x="240" y="172" text-anchor="middle">Corrugator</text>
 
         <!-- PROCERUS -->
         <path id="m-procerus" class="muscle-path"
           d="M228 175 Q240 170 252 175 Q255 190 252 198 Q240 194 228 198 Q225 190 228 175Z"
-          fill="#c0392b" opacity="0.75"
+          fill="#8a3a26" opacity="0.75"
           onclick="selectMuscle('procerus')" />
         <text class="muscle-label" x="240" y="210" text-anchor="middle" dy="-6">Procerus</text>
 
         <!-- ORBICULARIS OCULI LEFT -->
         <ellipse id="m-orboculi" class="muscle-path" cx="195" cy="195" rx="38" ry="22"
-          fill="#8b5cf6" opacity="0.7"
+          fill="#8a7a52" opacity="0.7"
           onclick="selectMuscle('orboculi')" />
         <!-- ORBICULARIS OCULI RIGHT -->
         <ellipse class="muscle-path" cx="285" cy="195" rx="38" ry="22"
-          fill="#8b5cf6" opacity="0.7"
+          fill="#8a7a52" opacity="0.7"
           onclick="selectMuscle('orboculi')" />
         <text class="muscle-label" x="155" y="199" text-anchor="middle">Orb. Oculi</text>
 
         <!-- TEMPORALIS (shown as side panels) -->
         <path id="m-temporalis" class="muscle-path"
           d="M96 155 Q100 120 115 100 Q130 85 150 88 Q155 100 155 120 Q160 145 158 170 Q148 180 135 185 Q110 178 96 155Z"
-          fill="#f59e0b" opacity="0.72"
+          fill="#c79a3e" opacity="0.72"
           onclick="selectMuscle('temporalis')" />
         <path class="muscle-path"
           d="M384 155 Q380 120 365 100 Q350 85 330 88 Q325 100 325 120 Q320 145 322 170 Q332 180 345 185 Q370 178 384 155Z"
-          fill="#f59e0b" opacity="0.72"
+          fill="#c79a3e" opacity="0.72"
           onclick="selectMuscle('temporalis')" />
         <text class="muscle-label" x="108" y="148" text-anchor="middle">Temporalis</text>
 
         <!-- ZYGOMATICUS MAJOR L -->
         <path id="m-zygmaj" class="muscle-path"
           d="M162 228 Q170 218 185 215 Q192 238 198 258 Q188 275 180 288 Q168 270 162 248 Z"
-          fill="#10b981" opacity="0.75"
+          fill="#5f7d4f" opacity="0.75"
           onclick="selectMuscle('zygmaj')" />
         <!-- ZYGOMATICUS MAJOR R -->
         <path class="muscle-path"
           d="M318 228 Q310 218 295 215 Q288 238 282 258 Q292 275 300 288 Q312 270 318 248 Z"
-          fill="#10b981" opacity="0.75"
+          fill="#5f7d4f" opacity="0.75"
           onclick="selectMuscle('zygmaj')" />
         <text class="muscle-label" x="148" y="252" text-anchor="middle">Zyg. Major</text>
 
         <!-- ZYGOMATICUS MINOR L -->
         <path id="m-zygmin" class="muscle-path"
           d="M176 218 Q185 210 198 208 Q200 222 196 234 Q186 232 176 225Z"
-          fill="#34d399" opacity="0.78"
+          fill="#8d9f77" opacity="0.78"
           onclick="selectMuscle('zygmin')" />
         <path class="muscle-path"
           d="M304 218 Q295 210 282 208 Q280 222 284 234 Q294 232 304 225Z"
-          fill="#34d399" opacity="0.78"
+          fill="#8d9f77" opacity="0.78"
           onclick="selectMuscle('zygmin')" />
         <text class="muscle-label" x="340" y="222" text-anchor="middle">Zyg. Minor</text>
 
         <!-- LEVATOR LABII L -->
         <path id="m-levlabii" class="muscle-path"
           d="M200 232 Q210 225 220 228 Q222 248 216 264 Q208 262 200 255 Z"
-          fill="#6366f1" opacity="0.78"
+          fill="#6f6a45" opacity="0.78"
           onclick="selectMuscle('levlabii')" />
         <path class="muscle-path"
           d="M280 232 Q270 225 260 228 Q258 248 264 264 Q272 262 280 255 Z"
-          fill="#6366f1" opacity="0.78"
+          fill="#6f6a45" opacity="0.78"
           onclick="selectMuscle('levlabii')" />
         <text class="muscle-label" x="348" y="248" text-anchor="middle">Lev. Labii</text>
 
         <!-- BUCCINATOR L -->
         <path id="m-buccinator" class="muscle-path"
           d="M158 270 Q168 252 188 248 Q198 268 196 295 Q186 310 170 308 Q155 295 158 270Z"
-          fill="#ec4899" opacity="0.7"
+          fill="#b5736a" opacity="0.7"
           onclick="selectMuscle('buccinator')" />
         <path class="muscle-path"
           d="M322 270 Q312 252 292 248 Q282 268 284 295 Q294 310 310 308 Q325 295 322 270Z"
-          fill="#ec4899" opacity="0.7"
+          fill="#b5736a" opacity="0.7"
           onclick="selectMuscle('buccinator')" />
         <text class="muscle-label" x="133" y="284" text-anchor="middle">Buccinator</text>
 
         <!-- MASSETER L -->
         <path id="m-masseter" class="muscle-path"
           d="M138 270 Q148 248 162 240 Q168 255 168 290 Q164 318 155 332 Q138 325 130 305 Q128 285 138 270Z"
-          fill="#dc2626" opacity="0.78"
+          fill="#9e3b27" opacity="0.78"
           onclick="selectMuscle('masseter')" />
         <path class="muscle-path"
           d="M342 270 Q332 248 318 240 Q312 255 312 290 Q316 318 325 332 Q342 325 350 305 Q352 285 342 270Z"
-          fill="#dc2626" opacity="0.78"
+          fill="#9e3b27" opacity="0.78"
           onclick="selectMuscle('masseter')" />
         <text class="muscle-label" x="112" y="298" text-anchor="middle">Masseter</text>
 
         <!-- ORBICULARIS ORIS -->
         <ellipse id="m-orboris" class="muscle-path" cx="240" cy="312" rx="44" ry="28"
-          fill="#7c3aed" opacity="0.72"
+          fill="#7d5a3c" opacity="0.72"
           onclick="selectMuscle('orboris')" />
         <text class="muscle-label" x="240" y="316" text-anchor="middle">Orb. Oris</text>
 
         <!-- DEPRESSOR ANGULI ORIS L -->
         <path id="m-dao" class="muscle-path"
           d="M196 326 Q205 318 214 322 Q216 342 210 356 Q200 354 194 342Z"
-          fill="#9333ea" opacity="0.78"
+          fill="#9c6b46" opacity="0.78"
           onclick="selectMuscle('dao')" />
         <path class="muscle-path"
           d="M284 326 Q275 318 266 322 Q264 342 270 356 Q280 354 286 342Z"
-          fill="#9333ea" opacity="0.78"
+          fill="#9c6b46" opacity="0.78"
           onclick="selectMuscle('dao')" />
         <text class="muscle-label" x="174" y="342" text-anchor="middle">Dep. Ang. Oris</text>
 
         <!-- MENTALIS -->
         <path id="m-mentalis" class="muscle-path"
           d="M222 356 Q240 350 258 356 Q260 372 255 382 Q240 386 225 382 Q220 372 222 356Z"
-          fill="#0891b2" opacity="0.78"
+          fill="#7a8a6a" opacity="0.78"
           onclick="selectMuscle('mentalis')" />
         <text class="muscle-label" x="240" y="370" text-anchor="middle">Mentalis</text>
 
         <!-- PLATYSMA (neck) -->
         <path id="m-platysma" class="muscle-path"
           d="M170 372 Q185 368 200 380 Q215 400 215 440 Q200 450 190 445 Q175 420 170 395 Z"
-          fill="#f97316" opacity="0.72"
+          fill="#c9743a" opacity="0.72"
           onclick="selectMuscle('platysma')" />
         <path class="muscle-path"
           d="M310 372 Q295 368 280 380 Q265 400 265 440 Q280 450 290 445 Q305 420 310 395 Z"
-          fill="#f97316" opacity="0.72"
+          fill="#c9743a" opacity="0.72"
           onclick="selectMuscle('platysma')" />
         <text class="muscle-label" x="155" y="415" text-anchor="middle">Platysma</text>
 
@@ -615,15 +779,15 @@
 
         <!-- Legend -->
         <rect x="10" y="520" width="460" height="55" rx="4" fill="white" opacity="0.85"/>
-        <text x="20" y="538" font-family="DM Sans" font-size="8" fill="#6b7280" font-weight="500">CLICK ANY MUSCLE TO SEE CLINICAL DETAILS →</text>
+        <text x="20" y="538" font-family="Mulish, sans-serif" font-size="8" fill="#6b7280" font-weight="500">CLICK ANY MUSCLE TO SEE DETAILED ANATOMY →</text>
         <g transform="translate(20, 548)">
-          <rect width="10" height="8" rx="2" fill="#4a9a9a"/><text x="13" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Forehead</text>
-          <rect x="75" width="10" height="8" rx="2" fill="#8b5cf6"/><text x="88" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Eye</text>
-          <rect x="115" width="10" height="8" rx="2" fill="#10b981"/><text x="128" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Cheek/Lift</text>
-          <rect x="195" width="10" height="8" rx="2" fill="#ec4899"/><text x="208" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Cheek/Buccal</text>
-          <rect x="285" width="10" height="8" rx="2" fill="#dc2626"/><text x="298" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Jaw</text>
-          <rect x="320" width="10" height="8" rx="2" fill="#7c3aed"/><text x="333" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Mouth</text>
-          <rect x="375" width="10" height="8" rx="2" fill="#f97316"/><text x="388" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Neck</text>
+          <rect width="10" height="8" rx="2" fill="#9cad9a"/><text x="13" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Forehead</text>
+          <rect x="75" width="10" height="8" rx="2" fill="#8a7a52"/><text x="88" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Eye</text>
+          <rect x="115" width="10" height="8" rx="2" fill="#5f7d4f"/><text x="128" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Cheek/Lift</text>
+          <rect x="195" width="10" height="8" rx="2" fill="#b5736a"/><text x="208" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Cheek/Buccal</text>
+          <rect x="285" width="10" height="8" rx="2" fill="#9e3b27"/><text x="298" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Jaw</text>
+          <rect x="320" width="10" height="8" rx="2" fill="#7d5a3c"/><text x="333" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Mouth</text>
+          <rect x="375" width="10" height="8" rx="2" fill="#c9743a"/><text x="388" y="8" font-family="Mulish, sans-serif" font-size="7.5" fill="#374151">Neck</text>
         </g>
       </svg>
     </div>
@@ -654,87 +818,87 @@
         <!-- SCM -->
         <path id="m-scm" class="muscle-path"
           d="M265 330 Q278 345 285 360 Q295 390 298 420 Q295 450 285 465 Q268 468 258 455 Q248 430 248 400 Q248 368 255 345 Z"
-          fill="#2563eb" opacity="0.72"
+          fill="#5d6b48" opacity="0.72"
           onclick="selectMuscle('scm')" />
         <text class="muscle-label" x="295" y="400" text-anchor="start">SCM</text>
 
         <!-- PLATYSMA side view -->
         <path class="muscle-path"
           d="M248 345 Q238 370 232 400 Q228 430 232 460 Q242 475 252 472 Q258 455 260 430 Q262 400 262 370 Q262 350 255 340Z"
-          fill="#f97316" opacity="0.7"
+          fill="#c9743a" opacity="0.7"
           onclick="selectMuscle('platysma')" />
         <text class="muscle-label" x="218" y="410" text-anchor="end">Platysma</text>
 
         <!-- TRAPEZIUS upper -->
         <path id="m-trapezius" class="muscle-path"
           d="M285 465 Q310 455 335 440 Q355 425 365 405 Q370 380 358 360 Q340 355 320 365 Q308 385 304 410 Q300 440 285 465Z"
-          fill="#059669" opacity="0.72"
+          fill="#4f7045" opacity="0.72"
           onclick="selectMuscle('trapezius')" />
         <text class="muscle-label" x="355" y="415" text-anchor="middle">Trapezius</text>
 
         <!-- TEMPORALIS side -->
         <path id="m-temporalis2" class="muscle-path"
           d="M160 100 Q175 80 200 72 Q220 68 240 75 Q255 85 260 105 Q255 125 240 140 Q220 150 200 148 Q180 148 165 135 Q155 120 160 100Z"
-          fill="#f59e0b" opacity="0.72"
+          fill="#c79a3e" opacity="0.72"
           onclick="selectMuscle('temporalis')" />
         <text class="muscle-label" x="210" y="110" text-anchor="middle">Temporalis</text>
 
         <!-- MASSETER side -->
         <path id="m-masseter2" class="muscle-path"
           d="M280 220 Q300 210 315 220 Q325 240 322 275 Q315 300 300 308 Q282 305 272 285 Q265 260 270 238 Z"
-          fill="#dc2626" opacity="0.78"
+          fill="#9e3b27" opacity="0.78"
           onclick="selectMuscle('masseter')" />
         <text class="muscle-label" x="315" y="262" text-anchor="start">Masseter</text>
 
         <!-- SUBOCCIPITALS -->
         <path id="m-suboccipital" class="muscle-path"
           d="M148 205 Q158 190 175 185 Q190 183 200 192 Q198 212 188 222 Q172 228 158 220Z"
-          fill="#7c3aed" opacity="0.72"
+          fill="#7d5a3c" opacity="0.72"
           onclick="selectMuscle('suboccipital')" />
         <text class="muscle-label" x="135" y="210" text-anchor="end">Suboccipitals</text>
 
         <!-- OCCIPITALIS -->
         <path id="m-occipitalis" class="muscle-path"
           d="M140 148 Q155 135 175 132 Q188 133 195 145 Q188 165 175 172 Q158 175 145 165Z"
-          fill="#0891b2" opacity="0.72"
+          fill="#7a8a6a" opacity="0.72"
           onclick="selectMuscle('occipitalis')" />
         <text class="muscle-label" x="130" y="155" text-anchor="end">Occipitalis</text>
 
         <!-- DIGASTRIC -->
         <path id="m-digastric" class="muscle-path"
           d="M250 310 Q262 316 275 320 Q285 332 280 348 Q268 350 255 345 Q245 335 245 322Z"
-          fill="#0d9488" opacity="0.75"
+          fill="#8f9d6a" opacity="0.75"
           onclick="selectMuscle('digastric')" />
         <text class="muscle-label" x="290" y="335" text-anchor="start">Digastric</text>
 
         <!-- PECTORALIS -->
         <path id="m-pectoralis" class="muscle-path"
           d="M220 490 Q255 498 300 492 Q330 485 350 470 Q355 490 345 515 Q300 535 220 525 Z"
-          fill="#be185d" opacity="0.68"
+          fill="#9c4a52" opacity="0.68"
           onclick="selectMuscle('pectoralis')" />
         <text class="muscle-label" x="280" y="510" text-anchor="middle">Pectoralis Major</text>
 
         <!-- Eye/ear suggestion -->
         <ellipse cx="305" cy="148" rx="6" ry="5" fill="#d4a882" opacity="0.6"/>
-        <text x="308" y="145" font-family="DM Sans" font-size="7" fill="#888">ear</text>
+        <text x="308" y="145" font-family="Mulish, sans-serif" font-size="7" fill="#888">ear</text>
         <!-- Jaw line -->
         <path d="M265 295 Q260 320 255 340" stroke="#d4a882" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
 
         <!-- Legend -->
         <rect x="10" y="540" width="460" height="30" rx="4" fill="white" opacity="0.85"/>
-        <text x="20" y="550" font-family="DM Sans" font-size="8" fill="#6b7280">Neck &amp; Jaw side view</text>
-        <text x="20" y="562" font-family="DM Sans" font-size="7.5" fill="#9ca3af">Click muscles to view clinical details in the panel →</text>
+        <text x="20" y="550" font-family="Mulish, sans-serif" font-size="8" fill="#6b7280">Neck &amp; Jaw side view</text>
+        <text x="20" y="562" font-family="Mulish, sans-serif" font-size="7.5" fill="#9ca3af">Click muscles to view detailed anatomy in the panel →</text>
       </svg>
     </div>
 
-    <p class="hint">Click any highlighted muscle to view full clinical anatomy</p>
+    <p class="hint">Click any highlighted muscle to view full detailed anatomy</p>
   </div>
 
   <!-- INFO PANEL -->
   <div class="info-panel" id="info-panel">
     <div class="panel-empty" id="panel-empty">
       <div class="icon">🫀</div>
-      <p>Select a muscle<br>to view clinical details</p>
+      <p>Select a muscle<br>to view detailed anatomy</p>
     </div>
 
     <!-- MUSCLE CARDS -->
@@ -1169,6 +1333,90 @@
 
   let selected = null;
 
+  // ── Tier / Practice Mode (teaser ladder) ──────────────────────────────
+  // One-time-purchase tiers. Each tier unlocks more of the SAME Practice Mode feature:
+  //   map    -> 1-2 sample basic videos only (teaser)
+  //   athome -> full basic video library + advanced teasers
+  //   pro    -> full basic + full advanced library
+  let tier = 'map';
+  const TIER_RANK = { map: 0, athome: 1, pro: 2 };
+  // Muscles whose technique is "advanced" (Buccal / deep muscle / sculpting).
+  const ADVANCED = new Set(['masseter','buccinator','zygmaj','zygmin','temporalis','platysma']);
+  // For the teaser at "The Map" tier, only these few muscles preview a sample video.
+  const MAP_SAMPLES = new Set(['frontalis','orboculi']);
+
+  function setTier(v) { tier = v; if (selected) renderPracticeMode(selected); }
+
+  function upgradeTo(v) {
+    document.getElementById('tier').value = v;
+    setTier(v);
+  }
+
+  // Decide what the user can see for this muscle, and build the Practice Mode block.
+  function practiceModeHTML(id) {
+    const isAdvanced = ADVANCED.has(id);
+    const rank = TIER_RANK[tier];
+    let unlocked, prompt = '';
+
+    if (isAdvanced) {
+      // advanced video: only Practitioner unlocks; others see locked teaser
+      unlocked = rank >= 2;
+      if (!unlocked) {
+        prompt = `<div class="pm-lock-prompt"><strong>Advanced technique &mdash; Practitioner</strong>
+          Unlock buccal, deep-muscle &amp; sculpting techniques with the Practitioner tier.
+          <br><button onclick="upgradeTo('pro')">Unlock with Practitioner</button></div>`;
+      }
+    } else {
+      // basic video: At-Home Glow and up get the full library; The Map gets samples only
+      if (rank >= 1) {
+        unlocked = true;
+      } else {
+        unlocked = MAP_SAMPLES.has(id); // sample teaser on The Map tier
+        if (!unlocked) {
+          prompt = `<div class="pm-lock-prompt"><strong>This is just the beginning.</strong>
+            Unlock all at-home techniques with At-Home Glow.
+            <br><button onclick="upgradeTo('athome')">Unlock with At-Home Glow</button></div>`;
+        } else {
+          prompt = `<div class="pm-lock-prompt"><strong>Sample technique</strong>
+            Enjoying this? Unlock all at-home techniques with At-Home Glow.
+            <br><button onclick="upgradeTo('athome')">See At-Home Glow</button></div>`;
+        }
+      }
+    }
+
+    const label = isAdvanced ? 'Advanced Technique' : 'Practice Mode';
+    const caption = unlocked
+      ? 'Watch Danielle demonstrate the technique, then follow along on the map.'
+      : 'Preview locked &mdash; upgrade to watch the full technique.';
+
+    return `<div class="practice-mode ${unlocked ? '' : 'locked'}">
+        <div class="pm-head">▶ ${label}</div>
+        <div class="pm-video" title="Video streams in the panel (Vimeo Pro / domain-locked) — stub">
+          <div class="pm-play">▶</div>
+        </div>
+        <div class="pm-caption">${caption}</div>
+        ${prompt}
+      </div>`;
+  }
+
+  function renderPracticeMode(id) {
+    const card = document.getElementById('card-' + id);
+    if (!card) return;
+    let slot = card.querySelector('.practice-mode-slot');
+    if (!slot) {
+      slot = document.createElement('div');
+      slot.className = 'practice-mode-slot';
+      // insert right after the muscle's <h2> / aging badge, above the anatomy fields
+      const anchor = card.querySelector('.aging-badge') || card.querySelector('h2');
+      anchor.insertAdjacentElement('afterend', slot);
+    }
+    slot.innerHTML = practiceModeHTML(id);
+  }
+
+  function toggleRoomMode() {
+    document.body.classList.toggle('room-mode');
+  }
+
   function selectMuscle(id) {
     // Hide empty state
     document.getElementById('panel-empty').style.display = 'none';
@@ -1177,6 +1425,9 @@
     // Show selected
     const card = document.getElementById('card-' + id);
     if (card) card.classList.add('active');
+
+    // Inject / refresh the Practice Mode video block for this muscle
+    renderPracticeMode(id);
 
     // Highlight in SVG
     document.querySelectorAll('.muscle-path').forEach(p => {
