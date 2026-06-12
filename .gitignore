@@ -1,0 +1,9 @@
+# Build/temp artifacts
+faceology-site.zip
+_shot_*.png
+_test_*.html
+
+# OS / editor cruft
+Thumbs.db
+.DS_Store
+desktop.ini

@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facial Muscle Clinical Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1B6B6B;
+    --teal-dark: #0f4040;
+    --teal-mid: #4a9a9a;
+    --teal-light: #c8e8e8;
+    --teal-pale: #eef7f7;
+    --gold: #c8973a;
+    --gold-light: #fdf3e3;
+    --cream: #faf7f2;
+    --dark: #1a1a2e;
+    --gray: #6b7280;
+    --light-gray: #f3f4f6;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    min-height: 100vh;
+  }
+
+  header {
+    background: var(--teal-dark);
+    padding: 28px 40px 22px;
+    text-align: center;
+  }
+  header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.4rem;
+    font-weight: 300;
+    color: white;
+    letter-spacing: 0.08em;
+  }
+  header p {
+    font-size: 0.82rem;
+    color: var(--teal-light);
+    margin-top: 6px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    background: var(--teal-dark);
+    padding: 0 40px;
+  }
+  .tab {
+    padding: 10px 28px;
+    cursor: pointer;
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal-light);
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 500;
+  }
+  .tab.active { color: white; border-bottom-color: var(--gold); }
+  .tab:hover { color: white; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── DIAGRAM PAGE ── */
+  .diagram-layout {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 0;
+    min-height: calc(100vh - 110px);
+  }
+
+  .diagram-area {
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 24px;
+    border-right: 1px solid var(--teal-light);
+  }
+
+  .view-toggle {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .view-btn {
+    padding: 6px 18px;
+    border: 1.5px solid var(--teal);
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--teal);
+    background: white;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .view-btn.active { background: var(--teal); color: white; }
+
+  .svg-container { position: relative; }
+  svg { overflow: visible; }
+
+  .muscle-path {
+    cursor: pointer;
+    transition: opacity 0.2s;
+    opacity: 0.82;
+  }
+  .muscle-path:hover { opacity: 1; filter: brightness(1.08); }
+  .muscle-path.active { opacity: 1; filter: brightness(1.12) drop-shadow(0 0 6px rgba(27,107,107,0.5)); }
+  .muscle-path.dimmed { opacity: 0.25; }
+
+  .muscle-label {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    fill: #1a1a2e;
+    font-weight: 500;
+    pointer-events: none;
+  }
+
+  .hint {
+    font-size: 0.72rem;
+    color: var(--gray);
+    margin-top: 16px;
+    letter-spacing: 0.05em;
+    font-style: italic;
+  }
+
+  /* ── PANEL ── */
+  .info-panel {
+    background: var(--teal-pale);
+    padding: 28px 24px;
+    overflow-y: auto;
+    max-height: calc(100vh - 110px);
+  }
+
+  .panel-empty {
+    text-align: center;
+    padding: 60px 20px;
+  }
+  .panel-empty .icon {
+    font-size: 2.5rem;
+    margin-bottom: 16px;
+    opacity: 0.3;
+  }
+  .panel-empty p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gray);
+    font-style: italic;
+  }
+
+  .muscle-card { display: none; }
+  .muscle-card.active { display: block; }
+
+  .muscle-card h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.7rem;
+    font-weight: 400;
+    color: var(--teal-dark);
+    border-bottom: 2px solid var(--teal-light);
+    padding-bottom: 10px;
+    margin-bottom: 18px;
+  }
+
+  .aging-badge {
+    display: inline-block;
+    background: var(--gold-light);
+    border: 1px solid var(--gold);
+    color: var(--gold);
+    font-size: 0.68rem;
+    padding: 3px 10px;
+    border-radius: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    font-weight: 500;
+  }
+
+  .field {
+    margin-bottom: 14px;
+  }
+  .field-label {
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--teal-mid);
+    font-weight: 500;
+    margin-bottom: 3px;
+  }
+  .field-value {
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: var(--dark);
+  }
+
+  .aging-box {
+    background: white;
+    border-left: 3px solid var(--teal);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 14px;
+    margin: 14px 0;
+  }
+  .aging-box .field-label { color: var(--teal); }
+
+  .tension-box {
+    background: var(--gold-light);
+    border-left: 3px solid var(--gold);
+    border-radius: 0 6px 6px 0;
+    padding: 12px 14px;
+    margin: 14px 0;
+  }
+  .tension-box .field-label { color: var(--gold); }
+
+  .technique-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .tag {
+    background: var(--teal-light);
+    color: var(--teal-dark);
+    font-size: 0.68rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── QUICK REF TABLE PAGE ── */
+  .ref-page {
+    padding: 36px 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .ref-page h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--teal-dark);
+    margin-bottom: 8px;
+  }
+  .ref-page .subtitle {
+    font-size: 0.8rem;
+    color: var(--gray);
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+  }
+  .ref-table th {
+    background: var(--teal-dark);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+  }
+  .ref-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--teal-light);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  .ref-table tr:nth-child(even) td { background: var(--teal-pale); }
+  .ref-table tr:hover td { background: var(--teal-light); }
+  .area-cell { font-weight: 500; color: var(--teal-dark); }
+  .muscle-cell { font-style: italic; color: var(--teal); }
+
+  /* ── SEQUENCE PAGE ── */
+  .seq-page { padding: 36px 40px; max-width: 1000px; margin: 0 auto; }
+  .seq-page h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    color: var(--teal-dark);
+    margin-bottom: 6px;
+  }
+  .seq-filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 20px 0 28px;
+  }
+  .filter-btn {
+    padding: 5px 14px;
+    border: 1.5px solid var(--teal-light);
+    border-radius: 16px;
+    cursor: pointer;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    color: var(--gray);
+    background: white;
+    transition: all 0.2s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .filter-btn.active { background: var(--teal); color: white; border-color: var(--teal); }
+
+  .seq-card {
+    background: white;
+    border-radius: 8px;
+    border: 1px solid var(--teal-light);
+    margin-bottom: 20px;
+    overflow: hidden;
+    display: none;
+  }
+  .seq-card.visible { display: block; }
+
+  .seq-card-header {
+    background: var(--teal);
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .seq-card-header h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem;
+    color: white;
+    font-weight: 400;
+  }
+  .seq-card-header span {
+    font-size: 0.7rem;
+    color: var(--teal-light);
+    font-style: italic;
+  }
+  .seq-steps { padding: 16px 20px; }
+  .seq-step {
+    display: grid;
+    grid-template-columns: 70px 160px 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--teal-pale);
+    align-items: start;
+  }
+  .seq-step:last-child { border-bottom: none; }
+  .step-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--teal-mid);
+    padding-top: 1px;
+  }
+  .step-tech {
+    font-size: 0.83rem;
+    font-weight: 500;
+    color: var(--teal-dark);
+  }
+  .step-note { font-size: 0.78rem; color: var(--gray); line-height: 1.5; }
+
+  /* ── MOBILE / RESPONSIVE ── */
+  @media (max-width: 768px) {
+    body { overflow-x: hidden; }
+    header { padding: 18px 14px 14px; }
+    header h1 { font-size: 1.45rem; letter-spacing: 0.02em; line-height: 1.15; }
+    header p { font-size: 0.68rem; letter-spacing: 0.06em; }
+
+    /* Tabs: let them wrap onto two rows, centered, on small screens */
+    .tabs {
+      padding: 4px 6px;
+      flex-wrap: wrap;
+      gap: 2px 6px;
+    }
+    .tab { padding: 8px 12px; font-size: 0.66rem; letter-spacing: 0.04em; }
+
+    /* Diagram: stack the face above the info panel */
+    .diagram-layout {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .diagram-area {
+      padding: 22px 14px;
+      border-right: none;
+      border-bottom: 1px solid var(--teal-light);
+    }
+    .svg-container svg { width: 100%; height: auto; max-width: 360px; }
+    .info-panel {
+      max-height: none;
+      padding: 22px 16px;
+    }
+    .panel-empty { padding: 32px 16px; }
+
+    /* Reference + sequence pages: reclaim side padding */
+    .ref-page, .seq-page { padding: 24px 16px; }
+    .ref-page h2, .seq-page h2 { font-size: 1.5rem; }
+
+    /* Reference table: smaller type, allow horizontal scroll if needed */
+    .ref-table { font-size: 0.76rem; display: block; overflow-x: auto; white-space: nowrap; }
+    .ref-table th, .ref-table td { padding: 8px 10px; }
+
+    /* Sequence steps: stack the three columns into one */
+    .seq-step {
+      grid-template-columns: 1fr;
+      gap: 3px;
+      padding: 10px 0;
+    }
+    .seq-card-header { padding: 12px 16px; }
+    .seq-steps { padding: 14px 16px; }
+  }
+
+  @media print {
+    .tabs, .view-toggle, .hint { display: none; }
+    .diagram-layout { grid-template-columns: 1fr; }
+    .info-panel { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Facial Muscle Clinical Map</h1>
+  <p>Interactive Reference for Estheticians &amp; Facial Massage Practitioners</p>
+</header>
+
+<div class="tabs">
+  <div class="tab active" onclick="showPage('diagram')">Muscle Diagram</div>
+  <div class="tab" onclick="showPage('quickref')">Aging Area Map</div>
+  <div class="tab" onclick="showPage('sequences')">Treatment Sequences</div>
+</div>
+
+<!-- ══ PAGE 1: DIAGRAM ══ -->
+<div class="page active" id="page-diagram">
+<div class="diagram-layout">
+  <div class="diagram-area">
+    <div class="view-toggle">
+      <button class="view-btn active" onclick="setView('front')">Front View</button>
+      <button class="view-btn" onclick="setView('side')">Neck &amp; Jaw</button>
+    </div>
+
+    <!-- FRONT VIEW -->
+    <div class="svg-container" id="view-front">
+      <svg width="480" height="580" viewBox="0 0 480 580">
+        <defs>
+          <!-- Skin gradient -->
+          <radialGradient id="skinGrad" cx="50%" cy="40%" r="55%">
+            <stop offset="0%" stop-color="#f5d5b8"/>
+            <stop offset="100%" stop-color="#e8b898"/>
+          </radialGradient>
+          <radialGradient id="neckGrad" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#f0cba8"/>
+            <stop offset="100%" stop-color="#e0b890"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Head outline -->
+        <ellipse cx="240" cy="210" rx="145" ry="180" fill="url(#skinGrad)" stroke="#d4a882" stroke-width="1.5"/>
+        <!-- Neck -->
+        <path d="M190 370 Q200 420 195 470 Q240 490 285 470 Q280 420 290 370" fill="url(#neckGrad)" stroke="#d4a882" stroke-width="1"/>
+        <!-- Shoulders suggestion -->
+        <path d="M150 470 Q180 490 240 495 Q300 490 330 470 L340 510 Q240 540 140 510 Z" fill="#e8c8a8" stroke="#d4a882" stroke-width="1" opacity="0.5"/>
+
+        <!-- FRONTALIS -->
+        <path id="m-frontalis" class="muscle-path" 
+          d="M155 120 Q175 95 210 88 Q240 82 270 88 Q305 95 325 120 Q315 145 305 160 Q270 155 240 154 Q210 155 175 160 Q165 145 155 120Z"
+          fill="#4a9a9a" opacity="0.75"
+          onclick="selectMuscle('frontalis')" />
+        <text class="muscle-label" x="240" y="125" text-anchor="middle">Frontalis</text>
+
+        <!-- CORRUGATOR SUPERCILII -->
+        <path id="m-corrugator" class="muscle-path"
+          d="M200 168 Q220 162 240 163 Q260 162 280 168 Q270 178 240 176 Q210 178 200 168Z"
+          fill="#e07b54" opacity="0.8"
+          onclick="selectMuscle('corrugator')" />
+        <text class="muscle-label" x="240" y="172" text-anchor="middle">Corrugator</text>
+
+        <!-- PROCERUS -->
+        <path id="m-procerus" class="muscle-path"
+          d="M228 175 Q240 170 252 175 Q255 190 252 198 Q240 194 228 198 Q225 190 228 175Z"
+          fill="#c0392b" opacity="0.75"
+          onclick="selectMuscle('procerus')" />
+        <text class="muscle-label" x="240" y="210" text-anchor="middle" dy="-6">Procerus</text>
+
+        <!-- ORBICULARIS OCULI LEFT -->
+        <ellipse id="m-orboculi" class="muscle-path" cx="195" cy="195" rx="38" ry="22"
+          fill="#8b5cf6" opacity="0.7"
+          onclick="selectMuscle('orboculi')" />
+        <!-- ORBICULARIS OCULI RIGHT -->
+        <ellipse class="muscle-path" cx="285" cy="195" rx="38" ry="22"
+          fill="#8b5cf6" opacity="0.7"
+          onclick="selectMuscle('orboculi')" />
+        <text class="muscle-label" x="155" y="199" text-anchor="middle">Orb. Oculi</text>
+
+        <!-- TEMPORALIS (shown as side panels) -->
+        <path id="m-temporalis" class="muscle-path"
+          d="M96 155 Q100 120 115 100 Q130 85 150 88 Q155 100 155 120 Q160 145 158 170 Q148 180 135 185 Q110 178 96 155Z"
+          fill="#f59e0b" opacity="0.72"
+          onclick="selectMuscle('temporalis')" />
+        <path class="muscle-path"
+          d="M384 155 Q380 120 365 100 Q350 85 330 88 Q325 100 325 120 Q320 145 322 170 Q332 180 345 185 Q370 178 384 155Z"
+          fill="#f59e0b" opacity="0.72"
+          onclick="selectMuscle('temporalis')" />
+        <text class="muscle-label" x="108" y="148" text-anchor="middle">Temporalis</text>
+
+        <!-- ZYGOMATICUS MAJOR L -->
+        <path id="m-zygmaj" class="muscle-path"
+          d="M162 228 Q170 218 185 215 Q192 238 198 258 Q188 275 180 288 Q168 270 162 248 Z"
+          fill="#10b981" opacity="0.75"
+          onclick="selectMuscle('zygmaj')" />
+        <!-- ZYGOMATICUS MAJOR R -->
+        <path class="muscle-path"
+          d="M318 228 Q310 218 295 215 Q288 238 282 258 Q292 275 300 288 Q312 270 318 248 Z"
+          fill="#10b981" opacity="0.75"
+          onclick="selectMuscle('zygmaj')" />
+        <text class="muscle-label" x="148" y="252" text-anchor="middle">Zyg. Major</text>
+
+        <!-- ZYGOMATICUS MINOR L -->
+        <path id="m-zygmin" class="muscle-path"
+          d="M176 218 Q185 210 198 208 Q200 222 196 234 Q186 232 176 225Z"
+          fill="#34d399" opacity="0.78"
+          onclick="selectMuscle('zygmin')" />
+        <path class="muscle-path"
+          d="M304 218 Q295 210 282 208 Q280 222 284 234 Q294 232 304 225Z"
+          fill="#34d399" opacity="0.78"
+          onclick="selectMuscle('zygmin')" />
+        <text class="muscle-label" x="340" y="222" text-anchor="middle">Zyg. Minor</text>
+
+        <!-- LEVATOR LABII L -->
+        <path id="m-levlabii" class="muscle-path"
+          d="M200 232 Q210 225 220 228 Q222 248 216 264 Q208 262 200 255 Z"
+          fill="#6366f1" opacity="0.78"
+          onclick="selectMuscle('levlabii')" />
+        <path class="muscle-path"
+          d="M280 232 Q270 225 260 228 Q258 248 264 264 Q272 262 280 255 Z"
+          fill="#6366f1" opacity="0.78"
+          onclick="selectMuscle('levlabii')" />
+        <text class="muscle-label" x="348" y="248" text-anchor="middle">Lev. Labii</text>
+
+        <!-- BUCCINATOR L -->
+        <path id="m-buccinator" class="muscle-path"
+          d="M158 270 Q168 252 188 248 Q198 268 196 295 Q186 310 170 308 Q155 295 158 270Z"
+          fill="#ec4899" opacity="0.7"
+          onclick="selectMuscle('buccinator')" />
+        <path class="muscle-path"
+          d="M322 270 Q312 252 292 248 Q282 268 284 295 Q294 310 310 308 Q325 295 322 270Z"
+          fill="#ec4899" opacity="0.7"
+          onclick="selectMuscle('buccinator')" />
+        <text class="muscle-label" x="133" y="284" text-anchor="middle">Buccinator</text>
+
+        <!-- MASSETER L -->
+        <path id="m-masseter" class="muscle-path"
+          d="M138 270 Q148 248 162 240 Q168 255 168 290 Q164 318 155 332 Q138 325 130 305 Q128 285 138 270Z"
+          fill="#dc2626" opacity="0.78"
+          onclick="selectMuscle('masseter')" />
+        <path class="muscle-path"
+          d="M342 270 Q332 248 318 240 Q312 255 312 290 Q316 318 325 332 Q342 325 350 305 Q352 285 342 270Z"
+          fill="#dc2626" opacity="0.78"
+          onclick="selectMuscle('masseter')" />
+        <text class="muscle-label" x="112" y="298" text-anchor="middle">Masseter</text>
+
+        <!-- ORBICULARIS ORIS -->
+        <ellipse id="m-orboris" class="muscle-path" cx="240" cy="312" rx="44" ry="28"
+          fill="#7c3aed" opacity="0.72"
+          onclick="selectMuscle('orboris')" />
+        <text class="muscle-label" x="240" y="316" text-anchor="middle">Orb. Oris</text>
+
+        <!-- DEPRESSOR ANGULI ORIS L -->
+        <path id="m-dao" class="muscle-path"
+          d="M196 326 Q205 318 214 322 Q216 342 210 356 Q200 354 194 342Z"
+          fill="#9333ea" opacity="0.78"
+          onclick="selectMuscle('dao')" />
+        <path class="muscle-path"
+          d="M284 326 Q275 318 266 322 Q264 342 270 356 Q280 354 286 342Z"
+          fill="#9333ea" opacity="0.78"
+          onclick="selectMuscle('dao')" />
+        <text class="muscle-label" x="174" y="342" text-anchor="middle">Dep. Ang. Oris</text>
+
+        <!-- MENTALIS -->
+        <path id="m-mentalis" class="muscle-path"
+          d="M222 356 Q240 350 258 356 Q260 372 255 382 Q240 386 225 382 Q220 372 222 356Z"
+          fill="#0891b2" opacity="0.78"
+          onclick="selectMuscle('mentalis')" />
+        <text class="muscle-label" x="240" y="370" text-anchor="middle">Mentalis</text>
+
+        <!-- PLATYSMA (neck) -->
+        <path id="m-platysma" class="muscle-path"
+          d="M170 372 Q185 368 200 380 Q215 400 215 440 Q200 450 190 445 Q175 420 170 395 Z"
+          fill="#f97316" opacity="0.72"
+          onclick="selectMuscle('platysma')" />
+        <path class="muscle-path"
+          d="M310 372 Q295 368 280 380 Q265 400 265 440 Q280 450 290 445 Q305 420 310 395 Z"
+          fill="#f97316" opacity="0.72"
+          onclick="selectMuscle('platysma')" />
+        <text class="muscle-label" x="155" y="415" text-anchor="middle">Platysma</text>
+
+        <!-- Eye details -->
+        <ellipse cx="195" cy="195" rx="18" ry="11" fill="white" opacity="0.6"/>
+        <ellipse cx="285" cy="195" rx="18" ry="11" fill="white" opacity="0.6"/>
+        <ellipse cx="195" cy="195" rx="8" ry="8" fill="#5a8a6a" opacity="0.8"/>
+        <ellipse cx="285" cy="195" rx="8" ry="8" fill="#5a8a6a" opacity="0.8"/>
+        <!-- Nose -->
+        <path d="M235 215 Q232 255 228 268 Q236 274 240 274 Q244 274 252 268 Q248 255 245 215" fill="#d4a882" opacity="0.4"/>
+        <!-- Mouth -->
+        <path d="M215 300 Q240 306 265 300" stroke="#c0806a" stroke-width="1.5" fill="none"/>
+
+        <!-- Legend -->
+        <rect x="10" y="520" width="460" height="55" rx="4" fill="white" opacity="0.85"/>
+        <text x="20" y="538" font-family="DM Sans" font-size="8" fill="#6b7280" font-weight="500">CLICK ANY MUSCLE TO SEE CLINICAL DETAILS →</text>
+        <g transform="translate(20, 548)">
+          <rect width="10" height="8" rx="2" fill="#4a9a9a"/><text x="13" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Forehead</text>
+          <rect x="75" width="10" height="8" rx="2" fill="#8b5cf6"/><text x="88" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Eye</text>
+          <rect x="115" width="10" height="8" rx="2" fill="#10b981"/><text x="128" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Cheek/Lift</text>
+          <rect x="195" width="10" height="8" rx="2" fill="#ec4899"/><text x="208" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Cheek/Buccal</text>
+          <rect x="285" width="10" height="8" rx="2" fill="#dc2626"/><text x="298" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Jaw</text>
+          <rect x="320" width="10" height="8" rx="2" fill="#7c3aed"/><text x="333" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Mouth</text>
+          <rect x="375" width="10" height="8" rx="2" fill="#f97316"/><text x="388" y="8" font-family="DM Sans" font-size="7.5" fill="#374151">Neck</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- SIDE / NECK VIEW -->
+    <div class="svg-container" id="view-side" style="display:none">
+      <svg width="480" height="580" viewBox="0 0 480 580">
+        <defs>
+          <radialGradient id="skinGrad2" cx="40%" cy="35%" r="60%">
+            <stop offset="0%" stop-color="#f5d5b8"/>
+            <stop offset="100%" stop-color="#e8b898"/>
+          </radialGradient>
+        </defs>
+
+        <!-- Head profile -->
+        <path d="M200 60 Q260 40 300 70 Q340 100 345 150 Q350 200 335 240 Q325 270 310 285 Q295 295 280 298 Q270 310 265 330 Q260 350 255 370" 
+          fill="url(#skinGrad2)" stroke="#d4a882" stroke-width="1.5"/>
+        <!-- Back of head -->
+        <path d="M200 60 Q150 80 135 130 Q125 180 140 230 Q155 270 180 290 Q210 305 255 310 Q260 295 280 298 Q295 295 310 285"
+          fill="url(#skinGrad2)" stroke="#d4a882" stroke-width="1.5"/>
+        <!-- Neck -->
+        <path d="M255 370 Q248 400 245 440 Q255 470 270 475 Q300 465 320 445 Q330 410 325 375 Q310 360 290 355 Q270 355 255 370Z"
+          fill="#f0cba8" stroke="#d4a882" stroke-width="1"/>
+        <!-- Shoulder/chest hint -->
+        <path d="M200 475 Q240 495 290 490 Q330 480 360 460 Q370 490 360 520 Q290 540 200 530 Z"
+          fill="#e8c8a8" opacity="0.5" stroke="#d4a882" stroke-width="0.8"/>
+
+        <!-- SCM -->
+        <path id="m-scm" class="muscle-path"
+          d="M265 330 Q278 345 285 360 Q295 390 298 420 Q295 450 285 465 Q268 468 258 455 Q248 430 248 400 Q248 368 255 345 Z"
+          fill="#2563eb" opacity="0.72"
+          onclick="selectMuscle('scm')" />
+        <text class="muscle-label" x="295" y="400" text-anchor="start">SCM</text>
+
+        <!-- PLATYSMA side view -->
+        <path class="muscle-path"
+          d="M248 345 Q238 370 232 400 Q228 430 232 460 Q242 475 252 472 Q258 455 260 430 Q262 400 262 370 Q262 350 255 340Z"
+          fill="#f97316" opacity="0.7"
+          onclick="selectMuscle('platysma')" />
+        <text class="muscle-label" x="218" y="410" text-anchor="end">Platysma</text>
+
+        <!-- TRAPEZIUS upper -->
+        <path id="m-trapezius" class="muscle-path"
+          d="M285 465 Q310 455 335 440 Q355 425 365 405 Q370 380 358 360 Q340 355 320 365 Q308 385 304 410 Q300 440 285 465Z"
+          fill="#059669" opacity="0.72"
+          onclick="selectMuscle('trapezius')" />
+        <text class="muscle-label" x="355" y="415" text-anchor="middle">Trapezius</text>
+
+        <!-- TEMPORALIS side -->
+        <path id="m-temporalis2" class="muscle-path"
+          d="M160 100 Q175 80 200 72 Q220 68 240 75 Q255 85 260 105 Q255 125 240 140 Q220 150 200 148 Q180 148 165 135 Q155 120 160 100Z"
+          fill="#f59e0b" opacity="0.72"
+          onclick="selectMuscle('temporalis')" />
+        <text class="muscle-label" x="210" y="110" text-anchor="middle">Temporalis</text>
+
+        <!-- MASSETER side -->
+        <path id="m-masseter2" class="muscle-path"
+          d="M280 220 Q300 210 315 220 Q325 240 322 275 Q315 300 300 308 Q282 305 272 285 Q265 260 270 238 Z"
+          fill="#dc2626" opacity="0.78"
+          onclick="selectMuscle('masseter')" />
+        <text class="muscle-label" x="315" y="262" text-anchor="start">Masseter</text>
+
+        <!-- SUBOCCIPITALS -->
+        <path id="m-suboccipital" class="muscle-path"
+          d="M148 205 Q158 190 175 185 Q190 183 200 192 Q198 212 188 222 Q172 228 158 220Z"
+          fill="#7c3aed" opacity="0.72"
+          onclick="selectMuscle('suboccipital')" />
+        <text class="muscle-label" x="135" y="210" text-anchor="end">Suboccipitals</text>
+
+        <!-- OCCIPITALIS -->
+        <path id="m-occipitalis" class="muscle-path"
+          d="M140 148 Q155 135 175 132 Q188 133 195 145 Q188 165 175 172 Q158 175 145 165Z"
+          fill="#0891b2" opacity="0.72"
+          onclick="selectMuscle('occipitalis')" />
+        <text class="muscle-label" x="130" y="155" text-anchor="end">Occipitalis</text>
+
+        <!-- DIGASTRIC -->
+        <path id="m-digastric" class="muscle-path"
+          d="M250 310 Q262 316 275 320 Q285 332 280 348 Q268 350 255 345 Q245 335 245 322Z"
+          fill="#0d9488" opacity="0.75"
+          onclick="selectMuscle('digastric')" />
+        <text class="muscle-label" x="290" y="335" text-anchor="start">Digastric</text>
+
+        <!-- PECTORALIS -->
+        <path id="m-pectoralis" class="muscle-path"
+          d="M220 490 Q255 498 300 492 Q330 485 350 470 Q355 490 345 515 Q300 535 220 525 Z"
+          fill="#be185d" opacity="0.68"
+          onclick="selectMuscle('pectoralis')" />
+        <text class="muscle-label" x="280" y="510" text-anchor="middle">Pectoralis Major</text>
+
+        <!-- Eye/ear suggestion -->
+        <ellipse cx="305" cy="148" rx="6" ry="5" fill="#d4a882" opacity="0.6"/>
+        <text x="308" y="145" font-family="DM Sans" font-size="7" fill="#888">ear</text>
+        <!-- Jaw line -->
+        <path d="M265 295 Q260 320 255 340" stroke="#d4a882" stroke-width="1" fill="none" stroke-dasharray="3,2"/>
+
+        <!-- Legend -->
+        <rect x="10" y="540" width="460" height="30" rx="4" fill="white" opacity="0.85"/>
+        <text x="20" y="550" font-family="DM Sans" font-size="8" fill="#6b7280">Neck &amp; Jaw side view</text>
+        <text x="20" y="562" font-family="DM Sans" font-size="7.5" fill="#9ca3af">Click muscles to view clinical details in the panel →</text>
+      </svg>
+    </div>
+
+    <p class="hint">Click any highlighted muscle to view full clinical anatomy</p>
+  </div>
+
+  <!-- INFO PANEL -->
+  <div class="info-panel" id="info-panel">
+    <div class="panel-empty" id="panel-empty">
+      <div class="icon">🫀</div>
+      <p>Select a muscle<br>to view clinical details</p>
+    </div>
+
+    <!-- MUSCLE CARDS -->
+    <div class="muscle-card" id="card-frontalis">
+      <h2>Frontalis</h2>
+      <div class="aging-badge">Forehead &amp; Scalp</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Galea aponeurotica (epicranial aponeurosis)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin of forehead, eyebrows, root of nose</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Raises eyebrows, wrinkles forehead horizontally, assists in opening eyes wide</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — temporal branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Chronic contraction creates permanent horizontal forehead lines; hypertonicity pulls scalp forward increasing tension throughout galea</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Raised resting brow position, deep horizontal lines, scalp tightness, forehead always appears "braced"</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Deep Muscle Work</span><span class="tag">Scalp Release</span><span class="tag">Lymphatic (open)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-corrugator">
+      <h2>Corrugator Supercilii</h2>
+      <div class="aging-badge">Glabella &amp; Brow</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Medial superciliary arch (frontal bone)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin of medial eyebrow</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Draws eyebrow medially and downward — creates vertical glabellar frown lines</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — temporal branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Primary driver of the "11" lines between brows; chronic frowning, screen use, and stress cause sustained hypertonicity</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Vertical lines between brows; eyebrows drawn together at rest; client looks worried or angry even when relaxed</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Deep Muscle Work</span><span class="tag">Cross-fiber Friction</span><span class="tag">Brow Sculpting</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-procerus">
+      <h2>Procerus</h2>
+      <div class="aging-badge">Glabella &amp; Brow</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Fascia over nasal bone and upper lateral nasal cartilage</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin between eyebrows (lower forehead / glabella)</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Pulls medial brow inferiorly; creates horizontal lines at root of nose</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — temporal branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Creates horizontal "bunny lines" across nose bridge; often contracted alongside corrugator in chronic frowning</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Horizontal lines at root of nose; nose scrunching expression at rest; brow depression</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Deep Muscle Work</span><span class="tag">Light Cross-fiber</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-orboculi">
+      <h2>Orbicularis Oculi</h2>
+      <div class="aging-badge">Eye Region</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Medial orbital margin, medial palpebral ligament, lacrimal bone</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin around orbital rim; lateral palpebral raphe</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Closes eyelid (palpebral = blinking; orbital = forced closure); compresses lacrimal sac</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — temporal and zygomatic branches</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Lateral portion creates crow's feet with repeated squinting; orbital portion compresses lymphatics creating under-eye puffiness; palpebral laxity causes eyelid hooding</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Crow's feet at outer corners; under-eye puffiness; eyelid appears heavy; fine radiating lines from lateral canthus</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Soft Lymphatic</span><span class="tag">Gentle Cross-fiber (lateral only)</span><span class="tag">Small Cup (lateral only)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-temporalis">
+      <h2>Temporalis</h2>
+      <div class="aging-badge">Jaw &amp; Temple</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Temporal fossa (entire floor and deep surface of temporal fascia)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Coronoid process and anterior ramus of mandible</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Elevates mandible; posterior fibers retract mandible; maintains jaw position at rest</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Trigeminal nerve (CN V) — mandibular division (V3), deep temporal nerves</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Chronic clenching creates temple hollowing; contributes to lateral brow descent; restriction causes radiating head pain and jaw tension</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Hollowed temples; temporal headache; tightness at side of head; upper jaw tension; earache without infection</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Deep Muscle Work</span><span class="tag">Buccal (for jaw)</span><span class="tag">Lymphatic (close)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-zygmaj">
+      <h2>Zygomaticus Major</h2>
+      <div class="aging-badge">Cheek &amp; Mid-Face</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Lateral zygomatic bone (cheekbone)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Modiolus (corner of mouth); orbicularis oris</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Draws angle of mouth superiorly and laterally — primary smiling muscle</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — zygomatic and buccal branches</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Repeated contraction deepens nasolabial folds; loss of tone contributes to mid-face descent and flattening of cheek contour</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Deep nasolabial folds; flat or descended cheek contour; cheek appears to drop below zygomatic arch</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Facial Sculpting</span><span class="tag">Buccal</span><span class="tag">Cupping</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-zygmin">
+      <h2>Zygomaticus Minor</h2>
+      <div class="aging-badge">Cheek &amp; Mid-Face</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Malar surface of zygomatic bone</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin of upper lip (lateral to philtrum)</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Elevates upper lip; contributes to nasolabial fold</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — zygomatic and buccal branches</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Works alongside zygomaticus major in mid-face descent; contributes to nasolabial fold and upper lip thinning appearance</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Deepening nasolabial fold; upper lip appears thinner; vertical lines beginning lateral to philtrum</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Facial Sculpting</span><span class="tag">Buccal</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-levlabii">
+      <h2>Levator Labii Superioris</h2>
+      <div class="aging-badge">Cheek &amp; Mid-Face</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Infraorbital margin of maxilla</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin of upper lip; alar cartilage of nose</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Elevates and everts upper lip; dilates nostril</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — zygomatic and buccal branches</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Key driver of nasolabial fold deepening; contributes to "gummy smile"; chronic tension thins upper lip appearance</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Deep nasolabial folds; upper lip appears thin; nostrils slightly flared at rest</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Buccal</span><span class="tag">Deep Muscle Work</span><span class="tag">Sculpting</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-buccinator">
+      <h2>Buccinator</h2>
+      <div class="aging-badge">Cheek — Primary Buccal Target</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Alveolar processes of maxilla and mandible; pterygomandibular raphe</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Modiolus; blends with orbicularis oris</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Compresses cheeks against teeth; assists chewing and blowing; maintains food between molars</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — buccal branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Loss of tone contributes to jowl formation and cheek laxity; hypertonicity from grinding creates tension lines; primary Buccal massage target</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Puffiness at mid-cheek; loss of jawline definition; cheek feels thick and tough on palpation</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Buccal Massage</span><span class="tag">Facial Sculpting</span><span class="tag">Lymphatic</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-masseter">
+      <h2>Masseter</h2>
+      <div class="aging-badge">Jaw — Most Commonly Hypertonic</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Zygomatic arch and zygomatic process of maxilla</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Lateral surface and angle of mandible; coronoid process</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Elevates mandible (closes jaw); assists lateral jaw movement; deep portion retracts mandible</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Trigeminal nerve (CN V) — mandibular division (V3), masseteric nerve</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Most commonly hypertonic facial muscle; grinding/clenching causes bulk hypertrophy that squares the jaw and creates jowl appearance; restricts lymphatic drainage from lower face</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Squared or enlarged lower jaw; jowling; cheek puffiness; jaw soreness; temporal headaches; clicking or grinding sounds</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Deep Muscle Work</span><span class="tag">Buccal Massage</span><span class="tag">Lymphatic (close)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-orboris">
+      <h2>Orbicularis Oris</h2>
+      <div class="aging-badge">Mouth &amp; Lower Face</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">No bone attachment — fibers from surrounding muscles (modiolus, buccinator)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin and mucosa of lips; blends with surrounding muscles</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Closes and protrudes lips; shapes lips for speech, kissing, and expression</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — buccal branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Chronic contraction creates perioral vertical lip lines ("smoker's lines"); loss of tone causes lip thinning and loss of definition at vermillion border</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Vertical lines above and below lip border; lip appears thinner and less defined; pursed or pinched look at rest</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Buccal Massage</span><span class="tag">Deep Muscle Work</span><span class="tag">Cupping (perioral)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-dao">
+      <h2>Depressor Anguli Oris</h2>
+      <div class="aging-badge">Mouth &amp; Lower Face</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Oblique line of mandible</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Modiolus; skin at angle of mouth</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Depresses corner of mouth — creates frowning expression</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — marginal mandibular branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Hypertonicity causes persistent downturned mouth corners; primary contributor to marionette line formation</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Downturned mouth corners at rest; marionette lines; resting frown expression; client looks sad or displeased</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Buccal Massage</span><span class="tag">Deep Muscle Work</span><span class="tag">Sculpting (lift)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-mentalis">
+      <h2>Mentalis</h2>
+      <div class="aging-badge">Chin</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Incisive fossa of mandible</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Skin of chin</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Elevates and protrudes lower lip; wrinkles chin skin</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — marginal mandibular branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Hypertonicity creates "orange peel" or "cobblestone" chin dimpling; often overactive when orbicularis oris is weak</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Dimpled or bumpy chin texture; puckered chin at rest; lower lip appears pushed forward</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Deep Muscle Work</span><span class="tag">Buccal (inferior)</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-platysma">
+      <h2>Platysma</h2>
+      <div class="aging-badge">Neck — Critical Aging Muscle</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Fascia over pectoralis major and deltoid (clavicular region)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Base of mandible; skin of lower face and cheek; modiolus; corners of mouth</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Depresses mandible; depresses lower lip and corners of mouth; tenses skin of neck</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — cervical branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">CRITICAL — directly inserts into lower face. Laxity creates neck bands. Chronic downward pull contributes to jowling, mouth corner descent, and overall lower face sagging. Single most impactful neck muscle for facial rejuvenation.</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Vertical neck bands (platysmal banding); jowling; downturned mouth corners; lower face drooping; "turkey neck" appearance</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Lymphatic (neck)</span><span class="tag">Sculpting</span><span class="tag">Deep Neck Work</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-scm">
+      <h2>Sternocleidomastoid (SCM)</h2>
+      <div class="aging-badge">Neck — Lymphatic Gatekeeper</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Manubrium of sternum (sternal head); medial clavicle (clavicular head)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Mastoid process of temporal bone; lateral superior nuchal line of occipital bone</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Unilateral: rotates head to opposite side, lateral flexion to same side. Bilateral: neck flexion, assisted inspiration</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Accessory nerve (CN XI); cervical plexus (C2–C3)</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Hypertonicity limits lymphatic drainage from the face — puffiness and fluid retention worsen when SCM is chronically tight. Affects ear, jaw, and temporal tension.</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Face appears puffier than expected; poor lymphatic drainage despite treatment; jaw tension that doesn't resolve; earache; headache radiating from neck; restricted neck rotation</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Neck Lymphatic</span><span class="tag">Deep Neck Release</span><span class="tag">Always address before facial drainage</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-suboccipital">
+      <h2>Suboccipitals</h2>
+      <div class="aging-badge">Head / Neck — Hidden Forehead Driver</div>
+      <div class="field"><div class="field-label">Muscles</div><div class="field-value">Rectus capitis posterior major &amp; minor; Obliquus capitis superior &amp; inferior</div></div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Posterior atlas (C1) and axis (C2)</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Inferior nuchal line of occipital bone</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Extend and rotate head at atlanto-occipital and atlanto-axial joints; fine motor control of head position</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Suboccipital nerve (posterior ramus of C1)</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Restriction here is often the hidden driver of chronic forehead tension — the suboccipital-frontal fascial chain runs continuously. Tight suboccipitals create compensatory frontalis hypertonicity.</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Chronic forehead tension that doesn't respond to direct treatment; base-of-skull headaches; client always furrows brow; tension worsens after screen time</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Suboccipital Release</span><span class="tag">Address before forehead work</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-occipitalis">
+      <h2>Occipitalis</h2>
+      <div class="aging-badge">Scalp / Head</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Lateral 2/3 of superior nuchal line; mastoid process of temporal bone</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Galea aponeurotica</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Retracts scalp posteriorly; works antagonistically with frontalis</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Facial nerve (CN VII) — posterior auricular branch</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">When occipitalis is tight, it limits galea mobility — contributing to scalp tightness that pulls on forehead skin, deepening forehead lines</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Scalp that doesn't move freely; frontal headaches; forehead tension even when frontalis isn't contracted</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Scalp/Galea Release</span><span class="tag">Address with Frontalis work</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-trapezius">
+      <h2>Trapezius (Upper Fibers)</h2>
+      <div class="aging-badge">Neck / Shoulder — Lymphatic Chain</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">External occipital protuberance; medial superior nuchal line; ligamentum nuchae; spinous processes C7–T12</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Lateral clavicle; acromion; spine of scapula</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Upper: elevates scapula, extends and laterally flexes head. Middle: retracts scapula. Lower: depresses scapula</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Accessory nerve (CN XI); cervical plexus (C3–C4)</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Chronic upper trap tension restricts lymphatic drainage, compresses cervical lymph nodes, and perpetuates lower face puffiness and jowling that facial massage alone cannot resolve</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Shoulders raised toward ears; facial puffiness that returns quickly after lymphatic drainage; persistent cheek heaviness; lateral neck tension</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Upper Trap Release</span><span class="tag">Clavicular Lymph Nodes</span><span class="tag">Neck Release before drainage</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-digastric">
+      <h2>Digastric</h2>
+      <div class="aging-badge">Submental / Jaw Floor</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Posterior belly: mastoid notch of temporal bone. Anterior belly: digastric fossa of mandible</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Intermediate tendon attached to hyoid bone</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Opens jaw (depresses mandible); elevates hyoid; assists in swallowing</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Posterior belly: facial nerve (CN VII). Anterior belly: trigeminal nerve (V3) via mylohyoid nerve</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Restriction under chin affects hyoid mobility, tensioning the entire floor of mouth — contributing to chin area descent, submental fullness, and loss of jawline definition</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Double chin or submental fullness that persists; poor jawline definition; chin feels "heavy"; difficulty swallowing comfortably</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Submental Release</span><span class="tag">Lymphatic</span><span class="tag">Deep Neck Work</span></div></div>
+    </div>
+
+    <div class="muscle-card" id="card-pectoralis">
+      <h2>Pectoralis Major (Clavicular Head)</h2>
+      <div class="aging-badge">Chest — Posture &amp; Fascial Chain</div>
+      <div class="field"><div class="field-label">Origin</div><div class="field-value">Medial clavicle; sternum; upper costal cartilages</div></div>
+      <div class="field"><div class="field-label">Insertion</div><div class="field-value">Greater tubercle of humerus</div></div>
+      <div class="field"><div class="field-label">Action</div><div class="field-value">Flexes and adducts humerus; medially rotates arm; assists forced inspiration</div></div>
+      <div class="field"><div class="field-label">Nerve Innervation</div><div class="field-value">Lateral and medial pectoral nerves (C5–T1)</div></div>
+      <div class="aging-box"><div class="field-label">Aging Role</div><div class="field-value">Tight pectorals pull shoulders forward creating forward head posture — which increases load on posterior neck muscles, compresses anterior neck lymphatics, and accelerates lower face and neck descent via fascial tension chain</div></div>
+      <div class="tension-box"><div class="field-label">Tension Shows As</div><div class="field-value">Forward head posture; anterior shoulder rounding; this position passively stretches and weakens platysma and lower face muscles, accelerating descent and banding</div></div>
+      <div class="field"><div class="field-label">Techniques</div><div class="technique-tags"><span class="tag">Pec Stretch / Release</span><span class="tag">Address posture chain</span><span class="tag">Decolletage work</span></div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ══ PAGE 2: QUICK REF ══ -->
+<div class="page" id="page-quickref">
+<div class="ref-page">
+  <h2>Aging Area → Muscle Map</h2>
+  <p class="subtitle">Which muscles to target for each aging concern</p>
+  <table class="ref-table">
+    <thead>
+      <tr><th>Aging Area</th><th>Primary Muscles</th><th>Secondary / Supporting</th><th>Key Techniques</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="area-cell">Forehead lines</td><td class="muscle-cell">Frontalis</td><td>Galea aponeurotica, Occipitalis</td><td>Deep muscle, Scalp release, Lymphatic</td></tr>
+      <tr><td class="area-cell">Glabella / 11 lines</td><td class="muscle-cell">Corrugator supercilii, Procerus</td><td>Orbicularis oculi (medial)</td><td>Cross-fiber friction, Deep muscle</td></tr>
+      <tr><td class="area-cell">Crow's feet</td><td class="muscle-cell">Orbicularis oculi (lateral)</td><td>Zygomaticus minor, Temporalis</td><td>Soft lymphatic, Gentle cross-fiber, Small cup (lateral only)</td></tr>
+      <tr><td class="area-cell">Eyelid hooding</td><td class="muscle-cell">Levator palpebrae, Frontalis</td><td>Orbicularis oculi</td><td>Indirect via brow lift; sculpting</td></tr>
+      <tr><td class="area-cell">Nasolabial folds</td><td class="muscle-cell">Levator labii sup., Zyg. major/minor</td><td>Buccinator, Orbicularis oris</td><td>Buccal, Deep muscle, Sculpting, Cupping</td></tr>
+      <tr><td class="area-cell">Marionette lines</td><td class="muscle-cell">Depressor anguli oris, Platysma</td><td>Buccinator, Mentalis</td><td>Buccal, Deep muscle, Sculpting (lift)</td></tr>
+      <tr><td class="area-cell">Jowls / jawline</td><td class="muscle-cell">Masseter, Platysma, Digastric</td><td>Buccinator, SMAS layer</td><td>Buccal, Deep muscle, Sculpting, Lymphatic</td></tr>
+      <tr><td class="area-cell">Lip lines / thinning</td><td class="muscle-cell">Orbicularis oris</td><td>Buccinator, Depressor labii inf.</td><td>Buccal, Deep muscle, Cupping (perioral)</td></tr>
+      <tr><td class="area-cell">Neck banding</td><td class="muscle-cell">Platysma</td><td>SCM, Digastric</td><td>Neck lymphatic, Sculpting, Deep neck work</td></tr>
+      <tr><td class="area-cell">Temple hollowing</td><td class="muscle-cell">Temporalis</td><td>Masseter, Zygomaticus arch</td><td>Deep muscle, Buccal</td></tr>
+      <tr><td class="area-cell">Chin dimpling</td><td class="muscle-cell">Mentalis</td><td>Depressor labii inferioris</td><td>Deep muscle, Buccal (inferior)</td></tr>
+      <tr><td class="area-cell">Persistent puffiness</td><td class="muscle-cell">SCM, Trapezius (upper)</td><td>Platysma</td><td>Neck release before lymphatic drainage</td></tr>
+      <tr><td class="area-cell">Forehead tension returning</td><td class="muscle-cell">Suboccipitals, Occipitalis</td><td>Frontalis, Galea</td><td>Suboccipital release, Scalp/galea work</td></tr>
+    </tbody>
+  </table>
+</div>
+</div>
+
+<!-- ══ PAGE 3: SEQUENCES ══ -->
+<div class="page" id="page-sequences">
+<div class="seq-page">
+  <h2>Treatment Sequences</h2>
+  <p style="font-size:0.8rem;color:#6b7280;margin-bottom:0;font-style:italic">Universal Rule: Open (Lymphatic) → Work (Targeted) → Close (Lymphatic)</p>
+  <div class="seq-filter">
+    <button class="filter-btn active" onclick="filterSeq('all')">All</button>
+    <button class="filter-btn" onclick="filterSeq('lines')">Fine Lines</button>
+    <button class="filter-btn" onclick="filterSeq('lift')">Lifting</button>
+    <button class="filter-btn" onclick="filterSeq('jaw')">Jaw / TMJ</button>
+    <button class="filter-btn" onclick="filterSeq('fluid')">Fluid / Puffiness</button>
+    <button class="filter-btn" onclick="filterSeq('sensitive')">Sensitive</button>
+  </div>
+
+  <div id="seq-cards">
+    <!-- Puffiness -->
+    <div class="seq-card visible" data-tags="fluid">
+      <div class="seq-card-header"><h3>Puffiness / Fluid Retention</h3><span>under-eye bags, morning puffiness</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic Drainage</div><div class="step-note">Open lymph nodes: clavicle → neck → preauricular. Feather pressure.</div></div>
+        <div class="seq-step"><div class="step-label">Work</div><div class="step-tech">Soft Lymphatic</div><div class="step-note">Maintain feather-light pressure throughout entire face.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Light Sculpting + Effleurage</div><div class="step-note">Gentle strokes to settle and smooth tissue.</div></div>
+      </div>
+    </div>
+
+    <!-- Fine Lines Dehydration -->
+    <div class="seq-card visible" data-tags="lines">
+      <div class="seq-card-header"><h3>Fine Lines — Dehydration</h3><span>surface crepiness, texture lines</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic Drainage</div><div class="step-note">Clear lymphatic pathways first.</div></div>
+        <div class="seq-step"><div class="step-label">Work</div><div class="step-tech">Facial Cupping</div><div class="step-note">Suction plumps tissue; draws nutrients to surface. Small cup around eyes, larger on cheeks.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Traditional Soft Lymphatic</div><div class="step-note">Alternate with cupping to maximize fluid movement.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Lymphatic</div><div class="step-note">Flush loosened congestion and debris.</div></div>
+      </div>
+    </div>
+
+    <!-- Fine Lines Expression -->
+    <div class="seq-card visible" data-tags="lines">
+      <div class="seq-card-header"><h3>Fine Lines — Expression / Muscle</h3><span>forehead, frown lines, crow's feet, lip lines</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic Drainage</div><div class="step-note">Decongest before working muscles.</div></div>
+        <div class="seq-step"><div class="step-label">Work</div><div class="step-tech">Deep Facial Muscle Work</div><div class="step-note">Frontalis (forehead), corrugator/procerus (glabella), orbicularis oculi (crow's feet).</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Buccal (lip lines)</div><div class="step-note">Releases orbicularis oris and buccinator from inside.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Lymphatic + Effleurage</div><div class="step-note">Drain and calm post-deep work.</div></div>
+      </div>
+    </div>
+
+    <!-- Nasolabial / Smile Lines -->
+    <div class="seq-card visible" data-tags="lines lift">
+      <div class="seq-card-header"><h3>Smile Lines / Nasolabial Folds</h3><span>lines running nose to mouth corners</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic</div><div class="step-note">Full face drainage sequence.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Buccal — Levator Labii / Buccinator</div><div class="step-note">Work muscles driving the fold from inside.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Deep Muscle — Zygomaticus</div><div class="step-note">External cross-fiber along the fold line.</div></div>
+        <div class="seq-step"><div class="step-label">Work 3</div><div class="step-tech">Sculpting</div><div class="step-note">Lift tissue superiorly along fold.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Cupping + Lymphatic</div><div class="step-note">Suction along fold, then lymphatic flush.</div></div>
+      </div>
+    </div>
+
+    <!-- Forehead Wrinkles -->
+    <div class="seq-card visible" data-tags="lines">
+      <div class="seq-card-header"><h3>Forehead Wrinkles</h3><span>horizontal lines, raised brow patterns</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic</div><div class="step-note">Drain from forehead toward temporal lymph nodes.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Deep Muscle — Frontalis</div><div class="step-note">Slow, firm cross-fiber friction perpendicular to the lines.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Scalp / Galea Release</div><div class="step-note">Release galea aponeurotica — tightness here pulls forehead skin.</div></div>
+        <div class="seq-step"><div class="step-label">Work 3</div><div class="step-tech">Sculpting</div><div class="step-note">Smooth downward fascial strokes along forehead.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Lymphatic + Effleurage</div><div class="step-note">Calm the tissue.</div></div>
+      </div>
+    </div>
+
+    <!-- Crow's Feet -->
+    <div class="seq-card visible" data-tags="lines">
+      <div class="seq-card-header"><h3>Crow's Feet</h3><span>lateral eye lines, crepiness at outer corners</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Soft Lymphatic</div><div class="step-note">Feather strokes outward from orbit toward preauricular nodes. Extremely light.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Deep Muscle — Orb. Oculi</div><div class="step-note">Gentle cross-fiber at lateral orbital rim ONLY. Never on orbital bone.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Cupping — Small Cup</div><div class="step-note">Very light suction laterally. Never over eyelid.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Soft Lymphatic</div><div class="step-note">Drain from lateral eye outward to preauricular.</div></div>
+      </div>
+    </div>
+
+    <!-- Jowls -->
+    <div class="seq-card visible" data-tags="lift">
+      <div class="seq-card-header"><h3>Jowls / Loss of Definition</h3><span>jowling, sagging cheeks, jawline</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic Drainage</div><div class="step-note">Decongest — you cannot lift congested tissue effectively.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Buccal — Buccinator + Masseter</div><div class="step-note">Release from inside; address bulk of masseter if hypertonic.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Facial Sculpting</div><div class="step-note">Work fascia along jawline and cheekbone superiorly.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Lymphatic</div><div class="step-note">Drain everything mobilized.</div></div>
+      </div>
+    </div>
+
+    <!-- Jaw / TMJ -->
+    <div class="seq-card visible" data-tags="jaw">
+      <div class="seq-card-header"><h3>Jaw Tension / TMJ / Grinding</h3><span>tight masseter, jaw pain, clenching</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Deep Muscle — Masseter + Temporalis</div><div class="step-note">Start external before intraoral. Slow sustained pressure into muscle belly.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Deep Muscle — SCM + Digastric</div><div class="step-note">Release cervical connections pulling on jaw.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Buccal Massage</div><div class="step-note">Intraoral masseter and pterygoid release.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Traditional Soft Lymphatic</div><div class="step-note">Tissue will be tender — parasympathetic finish essential.</div></div>
+      </div>
+    </div>
+
+    <!-- Deep wrinkles / volume -->
+    <div class="seq-card visible" data-tags="lines lift">
+      <div class="seq-card-header"><h3>Deep Wrinkles / Volume Loss</h3><span>nasolabial folds, marionette lines, lip lines</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Lymphatic Drainage</div><div class="step-note">Full lymphatic clearing sequence.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Buccal Massage</div><div class="step-note">Work levator labii, buccinator, orbicularis oris intraorally.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Deep Facial Muscle Work</div><div class="step-note">External work on masseter, zygomaticus major/minor.</div></div>
+        <div class="seq-step"><div class="step-label">Work 3</div><div class="step-tech">Facial Sculpting</div><div class="step-note">Lift and reposition fascia toward origin points.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Cupping + Lymphatic</div><div class="step-note">Cupping for collagen stimulus, then lymphatic flush.</div></div>
+      </div>
+    </div>
+
+    <!-- General aging -->
+    <div class="seq-card visible" data-tags="lift">
+      <div class="seq-card-header"><h3>General Aging / Rejuvenation</h3><span>combination of laxity, dullness, mild tension</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Open</div><div class="step-tech">Traditional Soft Lymphatic</div><div class="step-note">Most versatile and universally tolerated opening.</div></div>
+        <div class="seq-step"><div class="step-label">Work 1</div><div class="step-tech">Facial Sculpting</div><div class="step-note">Address fascia and overall lift.</div></div>
+        <div class="seq-step"><div class="step-label">Work 2</div><div class="step-tech">Cupping (cheeks + forehead)</div><div class="step-note">Collagen stimulus without aggression.</div></div>
+        <div class="seq-step"><div class="step-label">Work 3</div><div class="step-tech">Buccal (if appropriate)</div><div class="step-note">Deepen results on folds and lip area.</div></div>
+        <div class="seq-step"><div class="step-label">Close</div><div class="step-tech">Lymphatic</div><div class="step-note">Full flush to finish.</div></div>
+      </div>
+    </div>
+
+    <!-- Sensitive -->
+    <div class="seq-card visible" data-tags="sensitive">
+      <div class="seq-card-header"><h3>Sensitive / Reactive Skin</h3><span>rosacea, post-procedure, compromised barrier</span></div>
+      <div class="seq-steps">
+        <div class="seq-step"><div class="step-label">Only</div><div class="step-tech">Traditional Soft Lymphatic</div><div class="step-note">No cupping, no deep work, no Buccal. Nothing stimulating.</div></div>
+        <div class="seq-step"><div class="step-label">Goal</div><div class="step-tech">Reduce, calm, support</div><div class="step-note">Keep everything parasympathetic. Do not stimulate.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+  function showPage(name) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('page-' + name).classList.add('active');
+    event.target.classList.add('active');
+  }
+
+  function setView(view) {
+    document.getElementById('view-front').style.display = view === 'front' ? 'block' : 'none';
+    document.getElementById('view-side').style.display = view === 'side' ? 'block' : 'none';
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    // Clear selection when switching views
+    clearSelection();
+  }
+
+  let selected = null;
+
+  function selectMuscle(id) {
+    // Hide empty state
+    document.getElementById('panel-empty').style.display = 'none';
+    // Hide all cards
+    document.querySelectorAll('.muscle-card').forEach(c => c.classList.remove('active'));
+    // Show selected
+    const card = document.getElementById('card-' + id);
+    if (card) card.classList.add('active');
+
+    // Highlight in SVG
+    document.querySelectorAll('.muscle-path').forEach(p => {
+      p.classList.remove('active', 'dimmed');
+      p.classList.add('dimmed');
+    });
+    // Highlight all paths associated with this muscle
+    document.querySelectorAll('[id="m-' + id + '"], [onclick="selectMuscle(\'' + id + '\')"]').forEach(p => {
+      p.classList.remove('dimmed');
+      p.classList.add('active');
+    });
+    selected = id;
+  }
+
+  function clearSelection() {
+    document.getElementById('panel-empty').style.display = 'block';
+    document.querySelectorAll('.muscle-card').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.muscle-path').forEach(p => {
+      p.classList.remove('active', 'dimmed');
+    });
+    selected = null;
+  }
+
+  function filterSeq(tag) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    document.querySelectorAll('.seq-card').forEach(card => {
+      if (tag === 'all') {
+        card.classList.add('visible');
+      } else {
+        const tags = card.dataset.tags || '';
+        card.classList.toggle('visible', tags.includes(tag));
+      }
+    });
+  }
+</script>
+</body>
+</html>

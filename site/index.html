@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Faceology &mdash; The Facial Muscle Clinical Map for Estheticians</title>
+<meta name="description" content="An interactive clinical reference that maps every facial muscle to its aging role, tension signs, and the exact massage techniques that release it. Built for facialists and esthetics professionals.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #1B6B6B;
+    --teal-dark: #0f4040;
+    --teal-mid: #4a9a9a;
+    --teal-light: #c8e8e8;
+    --teal-pale: #eef7f7;
+    --gold: #c8973a;
+    --gold-light: #fdf3e3;
+    --cream: #faf7f2;
+    --dark: #1a1a2e;
+    --gray: #6b7280;
+    --white: #ffffff;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--cream);
+    color: var(--dark);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .serif { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .wrap { max-width: 1140px; margin: 0 auto; padding: 0 28px; }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(15, 64, 64, 0.96);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid rgba(200, 232, 232, 0.15);
+  }
+  .nav-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 14px 28px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    text-decoration: none;
+  }
+  .brand .mark {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--gold);
+    display: grid;
+    place-items: center;
+    color: var(--teal-dark);
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 1.25rem;
+    flex-shrink: 0;
+  }
+  .brand .name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    letter-spacing: 0.06em;
+    font-weight: 500;
+  }
+  .nav-links { display: flex; align-items: center; gap: 30px; }
+  .nav-links a {
+    color: var(--teal-light);
+    text-decoration: none;
+    font-size: 0.82rem;
+    letter-spacing: 0.04em;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: white; }
+  .nav-cta {
+    background: var(--gold);
+    color: var(--teal-dark) !important;
+    padding: 8px 18px;
+    border-radius: 22px;
+    font-weight: 600;
+    transition: transform 0.15s, box-shadow 0.2s;
+  }
+  .nav-cta:hover { transform: translateY(-1px); box-shadow: 0 6px 16px rgba(200,151,58,0.4); }
+  @media (max-width: 720px) { .nav-links a:not(.nav-cta) { display: none; } }
+
+  /* ── HERO ── */
+  .hero {
+    background:
+      radial-gradient(circle at 80% 10%, rgba(200,151,58,0.18), transparent 45%),
+      radial-gradient(circle at 10% 90%, rgba(74,154,154,0.25), transparent 50%),
+      linear-gradient(160deg, var(--teal-dark) 0%, #14595a 60%, var(--teal) 100%);
+    color: white;
+    padding: 90px 0 100px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 0 28px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 50px;
+    align-items: center;
+  }
+  .eyebrow {
+    display: inline-block;
+    border: 1px solid rgba(200,151,58,0.6);
+    color: var(--gold);
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+    font-weight: 600;
+  }
+  .hero h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3.6rem;
+    line-height: 1.08;
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    margin-bottom: 22px;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p.lead {
+    font-size: 1.12rem;
+    color: rgba(255,255,255,0.85);
+    max-width: 520px;
+    margin-bottom: 34px;
+    font-weight: 300;
+  }
+  .hero-btns { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    display: inline-block;
+    padding: 14px 30px;
+    border-radius: 28px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+  }
+  .btn-gold { background: var(--gold); color: var(--teal-dark); }
+  .btn-gold:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(200,151,58,0.45); }
+  .btn-ghost { background: transparent; color: white; border: 1.5px solid rgba(255,255,255,0.4); }
+  .btn-ghost:hover { background: rgba(255,255,255,0.1); border-color: white; }
+
+  .hero-stats {
+    display: flex;
+    gap: 36px;
+    margin-top: 46px;
+    padding-top: 30px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+  }
+  .stat .num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .stat .lbl {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: rgba(255,255,255,0.7);
+    margin-top: 6px;
+  }
+
+  /* Hero face illustration */
+  .hero-art {
+    display: flex;
+    justify-content: center;
+  }
+  .hero-art .face-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(200,232,232,0.2);
+    border-radius: 24px;
+    padding: 26px;
+    backdrop-filter: blur(4px);
+    box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+  }
+  @media (max-width: 880px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+    .hero h1 { font-size: 2.7rem; }
+    .hero-art { display: none; }
+  }
+
+  /* ── TRUST BAR ── */
+  .trust {
+    background: var(--teal-dark);
+    padding: 18px 0;
+    text-align: center;
+  }
+  .trust p {
+    color: var(--teal-light);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  /* ── SECTION SHELL ── */
+  section { padding: 84px 0; }
+  .section-head { text-align: center; max-width: 640px; margin: 0 auto 56px; }
+  .section-head .tag {
+    color: var(--gold);
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .section-head h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.5rem;
+    color: var(--teal-dark);
+    font-weight: 400;
+    margin: 10px 0 14px;
+    line-height: 1.15;
+  }
+  .section-head p { color: var(--gray); font-size: 1.02rem; }
+
+  /* ── FEATURES ── */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 26px;
+  }
+  .feature {
+    background: white;
+    border: 1px solid var(--teal-light);
+    border-radius: 16px;
+    padding: 32px 28px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .feature:hover { transform: translateY(-4px); box-shadow: 0 16px 38px rgba(15,64,64,0.1); }
+  .feature .ic {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: var(--teal-pale);
+    display: grid; place-items: center;
+    font-size: 1.5rem;
+    margin-bottom: 18px;
+  }
+  .feature h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.4rem;
+    color: var(--teal-dark);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+  .feature p { color: var(--gray); font-size: 0.92rem; }
+  @media (max-width: 880px) { .features { grid-template-columns: 1fr; } }
+
+  /* ── DEMO / TOOL ── */
+  .demo { background: var(--teal-pale); }
+  .demo-frame-wrap {
+    background: white;
+    border-radius: 18px;
+    border: 1px solid var(--teal-light);
+    box-shadow: 0 24px 60px rgba(15,64,64,0.14);
+    overflow: hidden;
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  .browser-bar {
+    background: var(--teal-dark);
+    padding: 11px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .browser-bar .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .browser-bar .url {
+    margin-left: 14px;
+    background: rgba(255,255,255,0.12);
+    color: var(--teal-light);
+    font-size: 0.72rem;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.04em;
+  }
+  .demo iframe {
+    width: 100%;
+    height: 760px;
+    border: none;
+    display: block;
+    background: var(--cream);
+  }
+  @media (max-width: 768px) {
+    .demo iframe { height: 82vh; min-height: 560px; }
+  }
+  .demo-note {
+    text-align: center;
+    margin-top: 18px;
+    color: var(--gray);
+    font-size: 0.85rem;
+    font-style: italic;
+  }
+  .demo-note a { color: var(--teal); font-weight: 600; }
+
+  /* ── HOW / STEPS ── */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    counter-reset: step;
+  }
+  .step { text-align: center; }
+  .step .n {
+    width: 56px; height: 56px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: var(--teal);
+    color: white;
+    display: grid; place-items: center;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+  }
+  .step h3 { font-size: 1.1rem; color: var(--teal-dark); margin-bottom: 6px; }
+  .step p { color: var(--gray); font-size: 0.9rem; }
+  @media (max-width: 880px) { .steps { grid-template-columns: 1fr; } }
+
+  /* ── PRICING ── */
+  .pricing { background: var(--teal-pale); }
+  .plans {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    align-items: stretch;
+  }
+  .plan {
+    background: white;
+    border: 1px solid var(--teal-light);
+    border-radius: 18px;
+    padding: 34px 28px;
+    display: flex;
+    flex-direction: column;
+  }
+  .plan.featured {
+    border: 2px solid var(--gold);
+    box-shadow: 0 20px 50px rgba(200,151,58,0.18);
+    position: relative;
+  }
+  .plan.featured::before {
+    content: "Most Popular";
+    position: absolute;
+    top: -13px; left: 50%; transform: translateX(-50%);
+    background: var(--gold);
+    color: var(--teal-dark);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 14px;
+  }
+  .plan h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.5rem;
+    color: var(--teal-dark);
+    font-weight: 500;
+  }
+  .plan .price {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    color: var(--teal);
+    margin: 12px 0 4px;
+  }
+  .plan .price span { font-size: 0.9rem; color: var(--gray); font-family: 'DM Sans'; }
+  .plan ul { list-style: none; margin: 20px 0 26px; flex-grow: 1; }
+  .plan li {
+    padding: 8px 0 8px 26px;
+    position: relative;
+    font-size: 0.9rem;
+    color: var(--dark);
+    border-bottom: 1px solid var(--teal-pale);
+  }
+  .plan li::before {
+    content: "✓";
+    position: absolute; left: 0;
+    color: var(--teal-mid);
+    font-weight: 700;
+  }
+  .plan .btn { text-align: center; }
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--teal);
+    color: var(--teal);
+  }
+  .btn-outline:hover { background: var(--teal); color: white; }
+  @media (max-width: 880px) { .plans { grid-template-columns: 1fr; } }
+
+  /* ── TESTIMONIAL ── */
+  .quote-section { text-align: center; }
+  .quote-section blockquote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem;
+    line-height: 1.4;
+    color: var(--teal-dark);
+    font-style: italic;
+    max-width: 760px;
+    margin: 0 auto 24px;
+    font-weight: 300;
+  }
+  .quote-section blockquote::before { content: "\201C"; color: var(--gold); }
+  .quote-section blockquote::after { content: "\201D"; color: var(--gold); }
+  .quote-section .author { font-weight: 600; color: var(--teal); }
+  .quote-section .role { font-size: 0.85rem; color: var(--gray); }
+
+  /* ── CTA ── */
+  .cta-band {
+    background:
+      radial-gradient(circle at 85% 20%, rgba(200,151,58,0.22), transparent 50%),
+      linear-gradient(135deg, var(--teal-dark), var(--teal));
+    color: white;
+    text-align: center;
+    padding: 80px 28px;
+  }
+  .cta-band h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem;
+    font-weight: 400;
+    margin-bottom: 14px;
+  }
+  .cta-band p { color: rgba(255,255,255,0.85); max-width: 520px; margin: 0 auto 30px; }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--teal-dark);
+    color: var(--teal-light);
+    padding: 54px 0 30px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 36px;
+  }
+  footer .brand .name { color: white; }
+  footer p.blurb { font-size: 0.88rem; color: rgba(200,232,232,0.7); margin-top: 14px; max-width: 320px; }
+  footer h4 {
+    color: white;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+  }
+  footer ul { list-style: none; }
+  footer li { margin-bottom: 9px; }
+  footer a { color: rgba(200,232,232,0.8); text-decoration: none; font-size: 0.88rem; }
+  footer a:hover { color: white; }
+  .footer-bottom {
+    border-top: 1px solid rgba(200,232,232,0.15);
+    padding-top: 22px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: rgba(200,232,232,0.55);
+  }
+  .disclaimer {
+    font-size: 0.72rem;
+    color: rgba(200,232,232,0.45);
+    margin-top: 14px;
+    line-height: 1.5;
+    max-width: 760px;
+  }
+  @media (max-width: 720px) { .footer-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<!-- ══ NAV ══ -->
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <span class="mark">F</span>
+      <span class="name">Faceology</span>
+    </a>
+    <div class="nav-links">
+      <a href="#features">Features</a>
+      <a href="#tool">The Map</a>
+      <a href="#how">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#tool" class="nav-cta">Open the Map</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ HERO ══ -->
+<header class="hero" id="top">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow">For Estheticians &amp; Facial Massage Practitioners</span>
+      <h1>Read the face. <em>Release</em> the tension. Reverse the years.</h1>
+      <p class="lead">Faceology is the interactive clinical map that connects every facial muscle to its aging role, the way tension shows on a client's face, and the exact massage sequence that releases it.</p>
+      <div class="hero-btns">
+        <a href="#tool" class="btn btn-gold">Explore the Live Map</a>
+        <a href="#pricing" class="btn btn-ghost">See Plans</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="num">20+</div><div class="lbl">Muscles Mapped</div></div>
+        <div class="stat"><div class="num">11</div><div class="lbl">Treatment Sequences</div></div>
+        <div class="stat"><div class="num">2</div><div class="lbl">Clinical Views</div></div>
+      </div>
+    </div>
+    <div class="hero-art">
+      <div class="face-card">
+        <!-- decorative mini face, echoing the tool's diagram -->
+        <svg width="280" height="330" viewBox="0 0 280 330">
+          <ellipse cx="140" cy="130" rx="92" ry="112" fill="#f5d5b8" stroke="#d4a882" stroke-width="1.5"/>
+          <path d="M58 60 Q74 42 104 36 Q140 30 176 36 Q206 42 222 60 Q214 78 204 88 Q174 84 140 83 Q106 84 76 88 Q66 78 58 60Z" fill="#4a9a9a" opacity="0.85"/>
+          <ellipse cx="108" cy="118" rx="24" ry="14" fill="#8b5cf6" opacity="0.8"/>
+          <ellipse cx="172" cy="118" rx="24" ry="14" fill="#8b5cf6" opacity="0.8"/>
+          <ellipse cx="108" cy="118" rx="10" ry="6" fill="#fff" opacity="0.6"/>
+          <ellipse cx="172" cy="118" rx="10" ry="6" fill="#fff" opacity="0.6"/>
+          <path d="M78 158 Q86 148 98 145 Q104 163 108 180 Q100 192 93 202 Q82 186 78 168Z" fill="#10b981" opacity="0.82"/>
+          <path d="M202 158 Q194 148 182 145 Q176 163 172 180 Q180 192 187 202 Q198 186 202 168Z" fill="#10b981" opacity="0.82"/>
+          <path d="M60 168 Q68 152 80 145 Q86 159 86 188 Q83 208 75 218 Q60 210 54 192 Q52 178 60 168Z" fill="#dc2626" opacity="0.82"/>
+          <path d="M220 168 Q212 152 200 145 Q194 159 194 188 Q197 208 205 218 Q220 210 226 192 Q228 178 220 168Z" fill="#dc2626" opacity="0.82"/>
+          <ellipse cx="140" cy="200" rx="26" ry="17" fill="#7c3aed" opacity="0.8"/>
+          <path d="M100 244 Q110 239 122 247 Q129 262 127 290 Q118 298 109 294 Q99 274 99 258Z" fill="#f97316" opacity="0.8"/>
+          <path d="M180 244 Q170 239 158 247 Q151 262 153 290 Q162 298 171 294 Q181 274 181 258Z" fill="#f97316" opacity="0.8"/>
+          <path d="M134 135 Q132 158 128 167 Q135 172 140 172 Q145 172 152 167 Q148 158 146 135" fill="#d4a882" opacity="0.35"/>
+          <path d="M122 192 Q140 197 158 192" stroke="#c0806a" stroke-width="1.4" fill="none"/>
+        </svg>
+        <div style="text-align:center; color:var(--teal-light); font-size:0.74rem; letter-spacing:0.1em; text-transform:uppercase; margin-top:10px;">Tap any muscle &middot; see the protocol</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="trust">
+  <div class="wrap"><p>Anatomy &middot; Aging Patterns &middot; Tension Mapping &middot; Treatment Sequencing &mdash; in one reference</p></div>
+</div>
+
+<!-- ══ FEATURES ══ -->
+<section id="features">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Why Faceology</span>
+      <h2>Everything you need to treat the muscle, not just the skin</h2>
+      <p>Move beyond guesswork. Faceology gives you the clinical reasoning behind every stroke, so each treatment is intentional and repeatable.</p>
+    </div>
+    <div class="features">
+      <div class="feature">
+        <div class="ic">🗺️</div>
+        <h3>Interactive Muscle Map</h3>
+        <p>Front and side-neck views. Tap any muscle to reveal its origin, insertion, action, innervation, aging role, and tension signs.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">🔎</div>
+        <h3>Aging Area Lookup</h3>
+        <p>Start from the concern &mdash; forehead lines, nasolabial folds, jowls &mdash; and instantly see the primary and supporting muscles to target.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">📋</div>
+        <h3>Treatment Sequences</h3>
+        <p>Eleven Open&rarr;Work&rarr;Close protocols for lines, lifting, jaw tension, puffiness, and sensitive skin &mdash; filterable in a tap.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">💆‍♀️</div>
+        <h3>Technique Tags</h3>
+        <p>Every muscle links to the right modality: lymphatic, buccal, cupping, sculpting, deep muscle, or cross-fiber friction.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">🧠</div>
+        <h3>Upstream Drivers</h3>
+        <p>Includes the hidden players &mdash; SCM, trapezius, suboccipitals, pectoralis &mdash; that sabotage facial results when ignored.</p>
+      </div>
+      <div class="feature">
+        <div class="ic">📱</div>
+        <h3>Treatment-Room Ready</h3>
+        <p>Clean, fast, and mobile-friendly. Pull it up on a tablet between strokes or print the matching clinical cheat sheets.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ THE TOOL ══ -->
+<section class="demo" id="tool">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">The Live Map</span>
+      <h2>Try it right here</h2>
+      <p>This is the real, working clinical map &mdash; the same tool your clients never see but your results always show.</p>
+    </div>
+    <div class="demo-frame-wrap">
+      <div class="browser-bar">
+        <span class="dot" style="background:#ff5f57"></span>
+        <span class="dot" style="background:#febc2e"></span>
+        <span class="dot" style="background:#28c840"></span>
+        <span class="url">faceology.app / clinical-map</span>
+      </div>
+      <iframe src="Facial_Muscle_Map.html" title="Faceology Facial Muscle Clinical Map" loading="lazy"></iframe>
+    </div>
+    <p class="demo-note">Tip: works best full-screen &mdash; <a href="Facial_Muscle_Map.html" target="_blank" rel="noopener">open the map in its own tab &rarr;</a></p>
+  </div>
+</section>
+
+<!-- ══ HOW IT WORKS ══ -->
+<section id="how">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">How It Works</span>
+      <h2>From client concern to confident protocol in three steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Assess the face</h3>
+        <p>Identify the visible concern &mdash; or use the Aging Area Map to translate what you see into the muscles behind it.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Understand the muscle</h3>
+        <p>Tap into anatomy, aging role, and how tension presents, so you know exactly what you're releasing and why.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Follow the sequence</h3>
+        <p>Run a proven Open&rarr;Work&rarr;Close protocol &mdash; always closing with lymphatic drainage for lasting results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ QUOTE ══ -->
+<section class="quote-section">
+  <div class="wrap">
+    <blockquote>Finally, a reference that thinks the way an experienced facialist does &mdash; from the concern, to the muscle, to the exact hands-on sequence.</blockquote>
+    <div class="author">Dani &mdash; Master Esthetician</div>
+    <div class="role">Creator of Faceology</div>
+  </div>
+</section>
+
+<!-- ══ PRICING ══ -->
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="tag">Plans</span>
+      <h2>Simple pricing for working professionals</h2>
+      <p>Start free. Upgrade when you're ready to bring it into every treatment room.</p>
+    </div>
+    <div class="plans">
+      <div class="plan">
+        <h3>Explore</h3>
+        <div class="price">Free</div>
+        <p style="color:var(--gray); font-size:0.86rem;">For curious practitioners</p>
+        <ul>
+          <li>Full interactive muscle map</li>
+          <li>Front &amp; side-neck views</li>
+          <li>Aging Area lookup</li>
+          <li>3 sample treatment sequences</li>
+        </ul>
+        <a href="#tool" class="btn btn-outline">Start Exploring</a>
+      </div>
+      <div class="plan featured">
+        <h3>Practitioner</h3>
+        <div class="price">$19<span>/mo</span></div>
+        <p style="color:var(--gray); font-size:0.86rem;">For solo facialists</p>
+        <ul>
+          <li>Everything in Explore</li>
+          <li>All 11 treatment sequences</li>
+          <li>Printable clinical cheat sheets</li>
+          <li>Buccal &amp; advanced technique notes</li>
+          <li>Offline / treatment-room mode</li>
+        </ul>
+        <a href="#" class="btn btn-gold">Start 14-Day Trial</a>
+      </div>
+      <div class="plan">
+        <h3>Studio</h3>
+        <div class="price">$49<span>/mo</span></div>
+        <p style="color:var(--gray); font-size:0.86rem;">For spas &amp; teams</p>
+        <ul>
+          <li>Everything in Practitioner</li>
+          <li>Up to 5 team members</li>
+          <li>Training mode for new staff</li>
+          <li>Custom protocol builder</li>
+          <li>Priority support</li>
+        </ul>
+        <a href="#" class="btn btn-outline">Contact Sales</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ CTA ══ -->
+<div class="cta-band">
+  <h2>Treat with intention.</h2>
+  <p>Open the clinical map and see how every line, fold, and band on the face traces back to a muscle you can release.</p>
+  <a href="#tool" class="btn btn-gold">Open the Map</a>
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <a href="#top" class="brand"><span class="mark">F</span><span class="name">Faceology</span></a>
+        <p class="blurb">The interactive clinical map for facial massage &mdash; connecting anatomy, aging, and technique for estheticians who treat the muscle, not just the surface.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#features">Features</a></li>
+          <li><a href="#tool">The Map</a></li>
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Resources</h4>
+        <ul>
+          <li><a href="Facial_Muscle_Map.html" target="_blank" rel="noopener">Open Full Map</a></li>
+          <li><a href="#">Cheat Sheet (PDF)</a></li>
+          <li><a href="#">Clinical Cheat Sheet</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 Faceology. All rights reserved.</span>
+      <span>Crafted for licensed esthetics professionals.</span>
+    </div>
+    <p class="disclaimer">For educational use by licensed estheticians and facial massage practitioners. Faceology is an anatomical and technique reference, not medical advice, diagnosis, or treatment. Always work within your scope of practice and applicable regulations.</p>
+  </div>
+</footer>
+
+<script>
+  // Active-link highlight on scroll
+  const sections = document.querySelectorAll('section[id], header[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const setActive = () => {
+    let current = '';
+    sections.forEach(s => {
+      if (window.scrollY >= s.offsetTop - 120) current = s.id;
+    });
+    navLinks.forEach(l => {
+      l.style.color = l.getAttribute('href') === '#' + current && !l.classList.contains('nav-cta')
+        ? '#ffffff' : '';
+    });
+  };
+  window.addEventListener('scroll', setActive);
+  setActive();
+</script>
+
+</body>
+</html>
