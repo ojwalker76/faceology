@@ -3,6 +3,9 @@ faceology-site.zip
 _shot_*.png
 _test_*.html
 
+# Internal-only reference material (do not publish to public repo)
+Somatic Face Map Brand Direction.docx
+
 # OS / editor cruft
 Thumbs.db
 .DS_Store
